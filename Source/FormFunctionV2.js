@@ -25,8 +25,25 @@ function DropdownList(dropdownList) {
     dropdownList.previousBackgroundColor = color.none;
     dropdownList.tabIndex = -1;
     Object.defineProperty(dropdownList, "title", {
-        get: function () { return (dropdownList.titleControl) ? dropdownList.titleControl.innerText : dropdownList.id; },
-        set: function (text) { if (dropdownList.titleControl) dropdownList.titleControl.innerText = text; }
+        get: function () {
+            if (dropdownList.titleControl) {
+                return dropdownList.titleControl.innerText;
+            }
+            else if (dropdownList.getAttribute("title")) {
+                return dropdownList.getAttribute("title");
+            }
+            else {
+                return dropdownList.id;
+            }
+        },
+        set: function (text) {
+            if (dropdownList.titleControl) {
+                dropdownList.titleControl.innerText = text;
+            }
+            else if (dropdownList.getAttribute("title")) {
+                dropdownList.setAttribute("title", text);
+            }
+        }
     });
     Object.defineProperty(dropdownList, "text", {
         get: function () { return (dropdownList.selectedIndex !== -1) ? dropdownList.options[dropdownList.selectedIndex].text : ""; },
@@ -211,8 +228,25 @@ function Grid(hiddenField) {
         set: function (value) { hiddenField.value = value; }
     });
     Object.defineProperty(grid, "title", {
-        get: function () { return (grid.titleControl) ? grid.titleControl.innerText : hiddenField.id; },
-        set: function (text) { if (grid.titleControl) grid.titleControl.innerText = text; }
+        get: function () {
+            if (grid.titleControl) {
+                return grid.titleControl.innerText;
+            }
+            else if (grid.getAttribute("title")) {
+                return grid.getAttribute("title");
+            }
+            else {
+                return hiddenField.id;
+            }
+        },
+        set: function (text) {
+            if (grid.titleControl) {
+                grid.titleControl.innerText = text;
+            }
+            else if (grid.getAttribute("title")) {
+                grid.setAttribute("title", text);
+            }
+        }
     });
     Object.defineProperty(grid, "noDataMessage", {
         get: function () { return (!grid.value) ? "[" + grid.title + "]" + "資料筆數為0" : ""; }
@@ -1157,8 +1191,25 @@ function TextBox(textBox) {
     textBox.noticeMessage = "";
     textBox.tabIndex = -1;
     Object.defineProperty(textBox, "title", {
-        get: function () { return (textBox.titleControl) ? textBox.titleControl.innerText : textBox.id; },
-        set: function (text) { if (textBox.titleControl) textBox.titleControl.innerText = text; }
+        get: function () {
+            if (textBox.titleControl) {
+                return textBox.titleControl.innerText;
+            }
+            else if (textBox.getAttribute("title")) {
+                return textBox.getAttribute("title");
+            }
+            else {
+                return textBox.id;
+            }
+        },
+        set: function (text) {
+            if (textBox.titleControl) {
+                textBox.titleControl.innerText = text;
+            }
+            else if (textBox.getAttribute("title")) {
+                textBox.setAttribute("title", text);
+            }
+        }
     });
     Object.defineProperty(textBox, "maxlength", {
         get: function () { return (textBox.getAttribute("maxlength")) ? parseInt(textBox.getAttribute("maxlength"), 10) : 0; },
@@ -1476,8 +1527,25 @@ function RadioButton(radioButton) {
         }
     });
     Object.defineProperty(radioButton, "title", {
-        get: function () { return (radioButton.titleControl) ? radioButton.titleControl.innerText : radioButton.id; },
-        set: function (text) { if (radioButton.titleControl) radioButton.titleControl.innerText = text; }
+        get: function () {
+            if (radioButton.titleControl) {
+                return radioButton.titleControl.innerText;
+            }
+            else if (radioButton.getAttribute("title")) {
+                return radioButton.getAttribute("title");
+            }
+            else {
+                return radioButton.id;
+            }
+        },
+        set: function (text) {
+            if (radioButton.titleControl) {
+                radioButton.titleControl.innerText = text;
+            }
+            else if (radioButton.getAttribute("title")) {
+                radioButton.setAttribute("title", text);
+            }
+        }
     });
     Object.defineProperty(radioButton, "backgroundColor", {
         get: function () { return radioButton.style.backgroundColor; },
@@ -1574,8 +1642,25 @@ function CheckBox(checkBox) {
     checkBox.previousBackgroundColor = color.none;
     checkBox.tabIndex = -1;
     Object.defineProperty(checkBox, "title", {
-        get: function () { return (checkBox.titleControl) ? checkBox.titleControl.innerText : checkBox.id; },
-        set: function (text) { if (checkBox.titleControl) checkBox.titleControl.innerText = text; }
+        get: function () {
+            if (checkBox.titleControl) {
+                return checkBox.titleControl.innerText;
+            }
+            else if (checkBox.getAttribute("title")) {
+                return checkBox.getAttribute("title");
+            }
+            else {
+                return checkBox.id;
+            }
+        },
+        set: function (text) {
+            if (checkBox.titleControl) {
+                checkBox.titleControl.innerText = text;
+            }
+            else if (checkBox.getAttribute("title")) {
+                checkBox.setAttribute("title", text);
+            }
+        }
     });
     Object.defineProperty(checkBox, "value", {
         get: function () {
@@ -1705,8 +1790,25 @@ function Link(link) {
         set: function (text) { link.innerText = text; }
     });
     Object.defineProperty(link, "title", {
-        get: function () { return (link.titleControl) ? link.titleControl.innerText : ""; },
-        set: function (text) { if (link.titleControl) link.titleControl.innerText = text; }
+        get: function () {
+            if (link.titleControl) {
+                return link.titleControl.innerText;
+            }
+            else if (link.getAttribute("title")) {
+                return link.getAttribute("title");
+            }
+            else {
+                return link.id;
+            }
+        },
+        set: function (text) {
+            if (link.titleControl) {
+                link.titleControl.innerText = text;
+            }
+            else if (link.getAttribute("title")) {
+                link.setAttribute("title", text);
+            }
+        }
     });
     Object.defineProperty(link, "visible", {
         get: function () { return (link.style.display !== "none") ? true : false; },
@@ -1817,8 +1919,25 @@ function DialogInput(dialogInput) {
         set: function (value) { if (dialogInput.labelControl) dialogInput.labelControl.value = value; }
     });
     Object.defineProperty(dialogInput, "title", {
-        get: function () { return (dialogInput.titleControl) ? dialogInput.titleControl.innerText : dialogInput.id; },
-        set: function (text) { if (dialogInput.titleControl) dialogInput.titleControl.innerText = text; }
+        get: function () {
+            if (dialogInput.titleControl) {
+                return dialogInput.titleControl.innerText;
+            }
+            else if (dialogInput.getAttribute("title")) {
+                return dialogInput.getAttribute("title");
+            }
+            else {
+                return dialogInput.id;
+            }
+        },
+        set: function (text) {
+            if (dialogInput.titleControl) {
+                dialogInput.titleControl.innerText = text;
+            }
+            else if (dialogInput.getAttribute("title")) {
+                dialogInput.setAttribute("title", text);
+            }
+        }
     });
     Object.defineProperty(dialogInput, "backgroundColor", {
         get: function () { return dialogInput.valueControl.style.backgroundColor; },
@@ -1998,8 +2117,25 @@ function SerialNumberTextBox(serialNumberTextBox) {
         get: function () { return serialNumberTextBox.innerText; }
     });
     Object.defineProperty(serialNumberTextBox, "title", {
-        get: function () { return (serialNumberTextBox.titleControl) ? serialNumberTextBox.titleControl.innerText : ""; },
-        set: function (text) { if (serialNumberTextBox.titleControl) serialNumberTextBox.titleControl.innerText = text; }
+        get: function () {
+            if (serialNumberTextBox.titleControl) {
+                return serialNumberTextBox.titleControl.innerText;
+            }
+            else if (serialNumberTextBox.getAttribute("title")) {
+                return serialNumberTextBox.getAttribute("title");
+            }
+            else {
+                return serialNumberTextBox.id;
+            }
+        },
+        set: function (text) {
+            if (serialNumberTextBox.titleControl) {
+                serialNumberTextBox.titleControl.innerText = text;
+            }
+            else if (serialNumberTextBox.getAttribute("title")) {
+                serialNumberTextBox.setAttribute("title", text);
+            }
+        }
     });
     Object.defineProperty(serialNumberTextBox, "visible", {
         get: function () { return (serialNumberTextBox.style.display !== "none") ? true : false; },
