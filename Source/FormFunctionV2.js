@@ -1481,6 +1481,11 @@ function TextBox(textBox) {
     //依狀態更新顯示外觀
     textBox.enabled = textBox.enabled;
 
+    //唯讀時取消點擊事件綁定
+    if (textBox.enabled === false) {
+        textBox.onclick = null;
+    }
+
     return textBox;
 }
 
@@ -2084,16 +2089,23 @@ function DialogInput(dialogInput) {
     dialogInput.valueControl.ondblclick = null;
     if (dialogInput.labelControl) dialogInput.labelControl.ondblclick = null;
 
-    //事件綁定
+    //點擊事件綁定
     if (typeof window[dialogInput.id + "_onclick"] === "function") {
         dialogInput.buttonControl.onclick = window[dialogInput.id + "_onclick"];
-
-        if (dialogInput.labelControl) dialogInput.labelControl.onclick = window[dialogInput.id + "_onclick"];
     }
 
-    //日曆及時間開窗控制項,點擊文字框亦可開窗
+    //點擊文字框亦可開窗
     if (!dialogInput.valueControl.onclick && dialogInput.buttonControl.onclick) {
         dialogInput.valueControl.onclick = dialogInput.buttonControl.onclick;
+
+        if (dialogInput.labelControl) dialogInput.labelControl.onclick = dialogInput.buttonControl.onclick;
+    }
+
+    //唯讀時取消點擊事件綁定
+    if (dialogInput.enabled === false) {
+        dialogInput.valueControl.onclick = null;
+        dialogInput.buttonControl.onclick = null;
+        if (dialogInput.labelControl) dialogInput.labelControl.onclick = null;
     }
 
     return dialogInput;
