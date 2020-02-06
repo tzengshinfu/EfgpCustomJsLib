@@ -22,6 +22,7 @@ function DropdownList(dropdownList) {
 
     dropdownList.controlType = "DropdownList";
     dropdownList.titleControl = document.getElementById("lbl_" + dropdownList.id) ? Label(document.getElementById("lbl_" + dropdownList.id)) : undefined;
+    dropdownList.hiddenControl = document.getElementById(dropdownList.id + "_hdn") ? HiddenTextBox(document.getElementById(dropdownList.id + "_hdn")) : undefined;
     dropdownList.previousBackgroundColor = color.none;
     dropdownList.tabIndex = -1;
     Object.defineProperty(dropdownList, "title", {
@@ -141,8 +142,8 @@ function DropdownList(dropdownList) {
         __jQuery(dropdownList).html(selectTag.html());
 
         //還原更新畫面前的已選值
-        if (document.getElementById(dropdownList.id + "_hdn")) {
-            dropdownList.value = eval(document.getElementById(dropdownList.id + "_hdn").value);
+        if (dropdownList.hiddenControl) {
+            dropdownList.value = eval(dropdownList.hiddenControl.value);
             dropdownList.selectedIndex = (dropdownList.selectedIndex === -1) ? 0 : dropdownList.selectedIndex;
         }
         else {
@@ -162,8 +163,8 @@ function DropdownList(dropdownList) {
         }
 
         //還原更新畫面前的已選值
-        if (document.getElementById(dropdownList.id + "_hdn")) {
-            dropdownList.value = eval(document.getElementById(dropdownList.id + "_hdn").value);
+        if (dropdownList.hiddenControl) {
+            dropdownList.value = eval(dropdownList.hiddenControl.value);
             dropdownList.selectedIndex = (dropdownList.selectedIndex === -1) ? 0 : dropdownList.selectedIndex;
         }
         else {
@@ -1913,6 +1914,8 @@ function DialogInput(dialogInput) {
     dialogInput.buttonControl = Button(document.getElementById(dialogInput.id + "_btn"));
     dialogInput.labelControl = document.getElementById(dialogInput.id + "_lbl") ? TextBox(document.getElementById(dialogInput.id + "_lbl")) : undefined;
     dialogInput.titleControl = document.getElementById("lbl_" + dialogInput.id) ? Label(document.getElementById("lbl_" + dialogInput.id)) : undefined;
+    dialogInput.hiddenControl = document.getElementById(dialogInput.id + "_hdn") ? HiddenTextBox(document.getElementById(dialogInput.id + "_hdn")) : undefined;
+    dialogInput.listHiddenControl = document.getElementById(dialogInput.id + "_list_hdn") ? HiddenTextBox(document.getElementById(dialogInput.id + "_list_hdn")) : undefined;
     dialogInput.previousBackgroundColor = color.none;
     dialogInput.tabIndex = -1;
     Object.defineProperty(dialogInput, "value", {
