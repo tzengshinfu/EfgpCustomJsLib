@@ -1961,6 +1961,7 @@ function DialogInput(dialogInput) {
     Object.defineProperty(dialogInput, "enabled", {
         get: function () { return !dialogInput.buttonControl.disabled; },
         set: function (value) {
+            dialogInput.buttonControl.disabled = !value;
             dialogInput.buttonControl.style.display = (value) ? "inline-block" : "none";
             dialogInput.valueControl.style.backgroundColor = (value) ? dialogInput.previousBackgroundColor : color.disabled;
             if (dialogInput.labelControl) dialogInput.labelControl.style.backgroundColor = (value) ? dialogInput.previousBackgroundColor : color.disabled;
