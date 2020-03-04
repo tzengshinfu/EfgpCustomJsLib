@@ -25,6 +25,7 @@ function DropdownList(dropdownList) {
     dropdownList.hiddenControl = document.getElementById(dropdownList.id + "_hdn") ? HiddenTextBox(document.getElementById(dropdownList.id + "_hdn")) : undefined;
     dropdownList.previousBackgroundColor = color.none;
     dropdownList.tabIndex = -1;
+    dropdownList.needCheck = true; //此控制項是否需要檢查是否有值
     Object.defineProperty(dropdownList, "title", {
         get: function () {
             if (dropdownList.titleControl) {
@@ -221,6 +222,7 @@ function Grid(hiddenField) {
     grid.titleControl = document.getElementById("lbl_" + hiddenField.id) ? Label(document.getElementById("lbl_" + hiddenField.id)) : undefined;
     grid.columnWidth = 60;
     grid.hasChanged = false; //是否要執行onchange事件
+    grid.needCheck = true; //此控制項是否需要檢查是否有值
     Object.defineProperty(grid, "id", {
         get: function () { return hiddenField.id; }
     });
@@ -1191,6 +1193,7 @@ function TextBox(textBox) {
     textBox.decimalPointPosition = -1;
     textBox.noticeMessage = "";
     textBox.tabIndex = -1;
+    textBox.needCheck = true; //此控制項是否需要檢查是否有值
     Object.defineProperty(textBox, "title", {
         get: function () {
             if (textBox.titleControl) {
@@ -1504,6 +1507,7 @@ function RadioButton(radioButton) {
     radioButton.buttonControls = document.getElementsByName(radioButton.id);
     radioButton.previousBackgroundColor = color.none;
     radioButton.tabIndex = -1;
+    radioButton.needCheck = true; //此控制項是否需要檢查是否有值
     Object.defineProperty(radioButton, "value", {
         get: function () {
             var checkedButtons = Array.apply(null, radioButton.buttonControls).filter(function (button) {
@@ -1647,6 +1651,7 @@ function CheckBox(checkBox) {
     checkBox.buttonControls = document.getElementsByName(checkBox.id);
     checkBox.previousBackgroundColor = color.none;
     checkBox.tabIndex = -1;
+    checkBox.needCheck = true; //此控制項是否需要檢查是否有值
     Object.defineProperty(checkBox, "title", {
         get: function () {
             if (checkBox.titleControl) {
@@ -1918,6 +1923,7 @@ function DialogInput(dialogInput) {
     dialogInput.listHiddenControl = document.getElementById(dialogInput.id + "_list_hdn") ? HiddenTextBox(document.getElementById(dialogInput.id + "_list_hdn")) : undefined;
     dialogInput.previousBackgroundColor = color.none;
     dialogInput.tabIndex = -1;
+    dialogInput.needCheck = true; //此控制項是否需要檢查是否有值
     Object.defineProperty(dialogInput, "value", {
         get: function () { return dialogInput.valueControl.value; },
         set: function (value) { dialogInput.valueControl.value = value; }
@@ -2211,6 +2217,7 @@ function HiddenTextBox(hiddenTextBox) {
 
     hiddenTextBox.controlType = "HiddenTextBox";
     hiddenTextBox.titleControl = document.getElementById("lbl_" + hiddenTextBox.id) ? Label(document.getElementById("lbl_" + hiddenTextBox.id)) : undefined;
+    hiddenTextBox.needCheck = true; //此控制項是否需要檢查是否有值
     Object.defineProperty(hiddenTextBox, "title", {
         get: function () { return (hiddenTextBox.titleControl) ? hiddenTextBox.titleControl.innerText : hiddenTextBox.id; },
         set: function (text) { if (hiddenTextBox.titleControl) hiddenTextBox.titleControl.innerText = text; }
@@ -2275,6 +2282,7 @@ function Barcode(barcode) {
     barcode.controlType = "Barcode";
     barcode.url = "/NaNaWeb/Barbecue/barcode?data=";
     barcode.titleControl = document.getElementById("lbl_" + barcode.id) ? Label(document.getElementById("lbl_" + barcode.id)) : undefined;
+    barcode.needCheck = true; //此控制項是否需要檢查是否有值
     Object.defineProperty(barcode, "value", {
         get: function () { return (barcode.src.includes(barcode.url)) ? barcode.src.split("=")[1] : ""; },
         set: function (value) { barcode.src = barcode.url + value; }
@@ -2345,6 +2353,7 @@ function AttachmentButton(attachmentButton) {
 
     attachmentButton.controlType = "AttachmentButton";
     attachmentButton.previousBackgroundColor = color.none;
+    attachmentButton.needCheck = true; //此控制項是否需要檢查是否有值
     Object.defineProperty(attachmentButton, "backgroundColor", {
         get: function () { return attachmentButton.style.backgroundColor; },
         set: function (color) {
@@ -2505,7 +2514,7 @@ function checkNoDataError(controlVariables) {
     var noDataMessage = "";
 
     controlVariables.forEach(function (controlVariable) {
-        if (controlVariable.noDataMessage) noDataMessage += lineBreak + controlVariable.noDataMessage;
+        if (controlVariable.noDataMessage && controlVariable.needCheck) noDataMessage += lineBreak + controlVariable.noDataMessage;
     });
 
     if (noDataMessage) throw new Error(noDataMessage);
