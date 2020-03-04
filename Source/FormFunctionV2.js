@@ -310,7 +310,8 @@ function Grid(hiddenField) {
         if (data) {
             hiddenField.value = JSON.stringify(data).replace(/"/g, "'");
         }
-        if (grid.value) {
+
+        if (hiddenField.value) {
             grid.reload(eval(hiddenField.value));
             if (grid.beforeReloadTop) grid.top = grid.beforeReloadTop;
             if (grid.beforeReloadLeft) grid.left = grid.beforeReloadLeft;
@@ -335,8 +336,7 @@ function Grid(hiddenField) {
         }, 100);
     }
     grid.clear = function () {
-        hiddenField.value = JSON.stringify(new Array());
-        grid.load();
+        grid.load([]);
     }
     grid.getColumnIndex = function (columnId) {
         if (grid.columnIds.indexOf(columnId) !== -1) {
