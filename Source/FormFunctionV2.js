@@ -315,6 +315,7 @@ function Grid(hiddenField) {
 
         if (hiddenField.value) {
             grid.reload(eval(hiddenField.value));
+
             if (grid.beforeReloadTop) grid.top = grid.beforeReloadTop;
             if (grid.beforeReloadLeft) grid.left = grid.beforeReloadLeft;
         }
@@ -1077,7 +1078,7 @@ function Button(button) {
 
                         for (var mappingIndex = 0; mappingIndex < mappingKeys.length; mappingIndex++) {
                             var mappingKey = mappingKeys[mappingIndex];
-                            var mappingValue = record[mappingKey] || "";
+                            var mappingValue = (record[mappingKey] === 0) ? record[mappingKey] : record[mappingKey] || "";
                             var mappingControlId = returnIdMappings[mappingKey];
                             var mappingControl = document.getElementById(mappingControlId);
                             var mappingControls = document.getElementsByName(mappingControlId);
@@ -1122,7 +1123,7 @@ function Button(button) {
                         var value = dataObject[key];
 
                         var dataCell = document.createElement("TD");
-                        dataCell.innerText = value || "";
+                        dataCell.innerText = (value === 0) ? value : value || "";
 
                         dataRow.appendChild(dataCell);
                     }
