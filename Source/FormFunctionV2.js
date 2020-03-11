@@ -951,12 +951,25 @@ function Button(button) {
 
         button.disabled = true;
 
-        //如果太靠近表單底端造成內容被遮蓋則向上移動到能呈現全部內容的位置
+        //#region 如果太靠近表單底端造成內容被遮蓋則向上移動到能呈現全部內容的位置
         var currentForm = document.forms[0];
         if (searchContainer.getBoundingClientRect().bottom >= currentForm.getBoundingClientRect().bottom) {
             var offSet = searchContainer.getBoundingClientRect().bottom - currentForm.getBoundingClientRect().bottom;
             searchContainer.style.top = (parseInt(searchContainer.style.top, 10) - offSet - 10);
         }
+        //#endregion
+
+        //#region 修正搜尋視窗大小
+        if (searchContainer.getBoundingClientRect().width > 700) {
+            searchContainer.style.width = '700px';
+        }
+
+        if (searchContainer.getBoundingClientRect().height > 400) {
+            searchContainer.style.height = '400px';
+            searchContainer.style.overflow = 'auto';
+            searchContainer.style.top = '300px';
+        }
+        //#endregion
 
         function getTotalPageCount(dataArray, page) {
             return Math.ceil(dataArray.length / parseInt(page.pagingCount, 10));
