@@ -2132,6 +2132,19 @@ function DialogInput(dialogInput) {
         if (dialogInput.labelControl) dialogInput.labelControl.onclick = null;
     }
 
+    //點擊滑鼠中鍵則清除內容
+    dialogInput.addEventListener('mousedown', function (evt) {
+        if (evt.which === 2) {
+            var initialDialogInputFunction = window[dialogInput.id + '_init'];
+
+            if (typeof initialDialogInputFunction === "function") {
+                initialDialogInputFunction();
+            }
+        }
+
+        return true;
+    }, null);
+
     return dialogInput;
 }
 
