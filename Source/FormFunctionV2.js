@@ -1983,8 +1983,12 @@ function DialogInput(dialogInput) {
         set: function (value) {
             dialogInput.buttonControl.disabled = !value;
             dialogInput.buttonControl.style.display = (value) ? "inline-block" : "none";
+            dialogInput.valueControl.disabled = !value;
             dialogInput.valueControl.style.backgroundColor = (value) ? dialogInput.previousBackgroundColor : color.disabled;
-            if (dialogInput.labelControl) dialogInput.labelControl.style.backgroundColor = (value) ? dialogInput.previousBackgroundColor : color.disabled;
+            if (dialogInput.labelControl) {
+                dialogInput.labelControl.disabled = !value;
+                dialogInput.labelControl.style.backgroundColor = (value) ? dialogInput.previousBackgroundColor : color.disabled;
+            }
         }
     });
     Object.defineProperty(dialogInput, "visible", {
@@ -2105,45 +2109,14 @@ function DialogInput(dialogInput) {
 
     //右邊的中文名稱欄位向右位移2PX以避免與按鈕重疊(限非Chrome瀏覽器)
     if (dialogInput.labelControl && !isChrome) dialogInput.labelControl.style.left = (parseInt(dialogInput.labelControl.style.left, 10) + 2);
-    //在流程定義為唯讀欄位則把按鈕隱藏
-    if (dialogInput.buttonControl.disabled) dialogInput.buttonControl.style.display = "none";
+
     //依狀態更新顯示外觀
     dialogInput.enabled = dialogInput.enabled;
-    //移除雙擊文字框觸發清空
-    dialogInput.valueControl.ondblclick = null;
-    if (dialogInput.labelControl) dialogInput.labelControl.ondblclick = null;
 
     //點擊事件綁定
     if (typeof window[dialogInput.id + "_onclick"] === "function") {
         dialogInput.buttonControl.onclick = window[dialogInput.id + "_onclick"];
     }
-
-    //點擊文字框亦可開窗
-    if (!dialogInput.valueControl.onclick && dialogInput.buttonControl.onclick) {
-        dialogInput.valueControl.onclick = dialogInput.buttonControl.onclick;
-
-        if (dialogInput.labelControl) dialogInput.labelControl.onclick = dialogInput.buttonControl.onclick;
-    }
-
-    //唯讀時取消點擊事件綁定
-    if (dialogInput.enabled === false) {
-        dialogInput.valueControl.onclick = null;
-        dialogInput.buttonControl.onclick = null;
-        if (dialogInput.labelControl) dialogInput.labelControl.onclick = null;
-    }
-
-    //點擊滑鼠中鍵則清除內容
-    dialogInput.addEventListener('mousedown', function (evt) {
-        if (evt.which === 2) {
-            var initialDialogInputFunction = window[dialogInput.id + '_init'];
-
-            if (typeof initialDialogInputFunction === "function") {
-                initialDialogInputFunction();
-            }
-        }
-
-        return true;
-    }, null);
 
     return dialogInput;
 }
