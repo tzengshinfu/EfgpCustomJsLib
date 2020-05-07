@@ -2869,7 +2869,7 @@ function setJumpSequence(controlVariables) {
                     Array.apply(null, document.getElementsByName(controlVariable.id)).forEach(function (item) {
                         currentTabIndex += 1;
                         item.tabIndex = currentTabIndex;
-                        item.onkeydown = jumpNextControl;
+                        item.onkeypress = jumpNextControl;
                     });
                     break;
 
@@ -2877,7 +2877,7 @@ function setJumpSequence(controlVariables) {
                     currentTabIndex += 1;
                     document.getElementById(controlVariable.id + "_0").tabIndex = currentTabIndex;
                     Array.apply(null, document.getElementsByName(controlVariable.id)).forEach(function (item) {
-                        item.onkeydown = jumpNextControl;
+                        item.onkeypress = jumpNextControl;
                     });
                     break;
 
@@ -2885,7 +2885,7 @@ function setJumpSequence(controlVariables) {
                     if (controlVariable.writable === true) {
                         currentTabIndex += 1;
                         controlVariable.valueControl.tabIndex = currentTabIndex;
-                        controlVariable.valueControl.onkeydown = jumpNextControl;
+                        controlVariable.valueControl.onkeypress = jumpNextControl;
                     }
                     break;
 
@@ -2899,13 +2899,13 @@ function setJumpSequence(controlVariables) {
                         controlVariable.tabIndex = currentTabIndex;
                     }
 
-                    controlVariable.onkeydown = jumpNextControl;
+                    controlVariable.onkeypress = jumpNextControl;
                     break;
 
                 default:
                     currentTabIndex += 1;
                     controlVariable.tabIndex = currentTabIndex;
-                    controlVariable.onkeydown = jumpNextControl;
+                    controlVariable.onkeypress = jumpNextControl;
                     break;
             }
         }
