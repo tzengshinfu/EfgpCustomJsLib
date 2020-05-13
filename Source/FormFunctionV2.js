@@ -666,7 +666,7 @@ function Button(button) {
         get: function () { return parseInt(button.style.height, 10); },
     });
 
-    button.openSearchWindow = function (dataArray, columnNames, returnIdMappings, clickFunc, cancelFunc) {
+    button.openSearchWindow = function (dataArray, columnNames, returnIdMappings, clickFunc, cancelFunc, isTiptopMode) {
         //分頁筆數,現在頁數,總頁數,資料起始index,資料結束index
         var page = { pagingCount: 10, currentCount: 1, totalCount: dataArray.length, dataStartIndex: 0, dataFinishIndex: 9 };
 
@@ -1001,7 +1001,19 @@ function Button(button) {
                         }
 
                         if (columnValue) {
-                            if (columnValue.toUpperCase().includes(filterTextbox.value.toUpperCase())) {
+                            //仿Tiptop搜尋方式(用*作為萬用字元)
+                            if (isTiptopMode) {
+                                //把*改成正規表達式的.*?(=任何字元出現0次到無限次)
+                                var rule =  '^' + filterTextbox.value.split('').map(function(char){ return char.replace('*','.*?'); }).join('') + '$';
+                                var filter = new RegExp(rule, 'gi'); //忽略大小寫
+                                
+                                if (filter.test(columnValue)) {
+                                    filteredDataArray.push(data);
+
+                                    break;
+                                }
+                            }
+                            else if (columnValue.toUpperCase().includes(filterTextbox.value.toUpperCase())) {
                                 filteredDataArray.push(data);
 
                                 break;
