@@ -2614,7 +2614,7 @@ function getAttachmentInfos() {
 
             var currentRow = attachmentTable.rows[index];
             var currentFileNameCell = currentRow.cells[1];
-            var fileDownloadLink = (isNewForm()) ? currentFileNameCell.childNodes[3] : currentFileNameCell.childNodes[1];
+            var fileDownloadLink = currentFileNameCell.childNodes.length === 3  ? currentFileNameCell.childNodes[1] : currentFileNameCell.childNodes[3];
             var fileName = fileDownloadLink.href.replace("javascript:downloadDocument(", "").replace(")", "");
             var fileNames = fileName.split(",");
             var physicalFileName = fileNames[0].replace(/'/g, "");
@@ -2657,11 +2657,11 @@ function isDispatch() {
 }
 
 /**
-* 判斷表單是否為新表單(未派送)
+* 判斷表單是否為"新"表單(未派送/未儲存表單/未儲存草稿)
 * @returns {boolean} 回傳結果
 */
 function isNewForm() {
-    return (!serialNumber) ? true : false;
+    return (!serialNumber && document.getElementById('hdnMethod').value === 'handleForm' && document.getElementById('hdnFormInstOID').value === '') ? true : false;
 }
 
 /**
