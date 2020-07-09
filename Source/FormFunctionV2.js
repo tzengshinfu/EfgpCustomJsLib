@@ -8,7 +8,8 @@ document.write('<script type="text/javascript" src="../../dwrDefault/util.js"></
 document.write('<script type="text/javascript" src="../../dwrDefault/interface/ajax_ProcessAccessor.js"></script>');
 
 var color = { required: "#FFFF99", disabled: "#F0F0F0", optional: "#FFFFFF", none: "" };
-var isChrome = (navigator.userAgent.toUpperCase().indexOf("CHROME") != -1) ? true : false;
+var isChrome = (navigator.userAgent.indexOf("Chrome") != -1) ? true : false;
+var isIE11 = (navigator.userAgent.indexOf("Trident/7.0") != -1) ? true : false;
 var range = { isGreaterZero: "> 0", isGreaterEqualZero: ">= 0", isLessZero: "< 0", isLessEqualZero: "<= 0", unlimited: "" };
 
 /**
@@ -190,16 +191,6 @@ function DropdownList(dropdownList) {
     dropdownList.style.border = "#ccc 1px solid"
     //依狀態更新顯示外觀
     dropdownList.enabled = dropdownList.enabled;
-
-    //IE停用Dropdownlist時字體會變灰導致較難辦識,以此設定覆蓋原有CSS
-    if (document.getElementsByTagName("dropdownlist-css-custom").length === 0) {
-        var customDropdownlistCssTag = document.createElement("dropdownlist-css-custom");
-        var styleTag = document.createElement("style");
-        styleTag.type = "text/css";
-        styleTag.appendChild(document.createTextNode("select::-ms-value { background-color: transparent; color: inherit; }"));
-        customDropdownlistCssTag.appendChild(styleTag);
-        document.body.appendChild(customDropdownlistCssTag);
-    }
 
     //事件綁定
     if (typeof window[dropdownList.id + "_onload"] === "function") window[dropdownList.id + "_onload"]();
@@ -1004,9 +995,9 @@ function Button(button) {
                             //仿Tiptop搜尋方式(用*作為萬用字元)
                             if (isTiptopMode) {
                                 //把*改成正規表達式的.*?(=任何字元出現0次到無限次)
-                                var rule =  '^' + filterTextbox.value.split('').map(function(char){ return char.replace('*','.*?'); }).join('') + '$';
+                                var rule = '^' + filterTextbox.value.split('').map(function (char) { return char.replace('*', '.*?'); }).join('') + '$';
                                 var filter = new RegExp(rule, 'gi'); //忽略大小寫
-                                
+
                                 if (filter.test(columnValue)) {
                                     filteredDataArray.push(data);
 
@@ -2614,7 +2605,7 @@ function getAttachmentInfos() {
 
             var currentRow = attachmentTable.rows[index];
             var currentFileNameCell = currentRow.cells[1];
-            var fileDownloadLink = currentFileNameCell.childNodes.length === 3  ? currentFileNameCell.childNodes[1] : currentFileNameCell.childNodes[3];
+            var fileDownloadLink = currentFileNameCell.childNodes.length === 3 ? currentFileNameCell.childNodes[1] : currentFileNameCell.childNodes[3];
             var fileName = fileDownloadLink.href.replace("javascript:downloadDocument(", "").replace(")", "");
             var fileNames = fileName.split(",");
             var physicalFileName = fileNames[0].replace(/'/g, "");
@@ -2928,3 +2919,31 @@ function setJumpSequence(controlVariables) {
 
     lastTabIndex = currentTabIndex;
 }
+
+//IE停用Dropdownlist/RadioButton/CheckBox時字體/選項會變灰導致較難辦識,以此設定覆蓋原有CSS
+(function () {
+    if (isIE11 && document.getElementsByTagName("ie11-custom-css").length === 0) {
+        var ie11CustomCssTag = document.createElement("ie11-custom-css");
+
+        var dropdownListTag = document.createElement("dropdownlist");
+        var dropdownListStyleTag = document.createElement("style");
+        dropdownListStyleTag.type = "text/css";
+        dropdownListStyleTag.appendChild(document.createTextNode("select:disabled::-ms-value { color: #4D4D4D; background-color: transparent; }"));
+        dropdownListTag.appendChild(dropdownListStyleTag);
+        ie11CustomCssTag.appendChild(dropdownListTag);
+
+        var radioButtonTag = document.createElement("radioButton");
+        var radioButtonStyleTag = document.createElement("style");
+        radioButtonStyleTag.type = "text/css";
+        radioButtonStyleTag.appendChild(document.createTextNode("input[type=radio]:disabled::-ms-check { color: #D1D1D1; background-color: transparent; }"));
+        radioButtonTag.appendChild(radioButtonStyleTag);
+        ie11CustomCssTag.appendChild(radioButtonTag);
+
+        var checkBoxCustomStyleTag = document.createElement("style");
+        checkBoxCustomStyleTag.type = "text/css";
+        checkBoxCustomStyleTag.appendChild(document.createTextNode("input[type=checkbox]:disabled::-ms-check { color: #D1D1D1; background-color: transparent; }"));
+        ie11CustomCssTag.appendChild(checkBoxCustomStyleTag);
+
+        document.body.appendChild(ie11CustomCssTag);
+    }
+}());
