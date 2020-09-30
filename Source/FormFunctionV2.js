@@ -306,9 +306,7 @@ function Grid(hiddenField) {
 
         if (hiddenField.value) {
             grid.reload(eval(hiddenField.value));
-
-            if (grid.beforeReloadTop) grid.top = grid.beforeReloadTop;
-            if (grid.beforeReloadLeft) grid.left = grid.beforeReloadLeft;
+            grid.reposition();
         }
     }
     grid.save = function () {
@@ -455,16 +453,19 @@ function Grid(hiddenField) {
     }
     grid.add = function () {
         grid.addRow();
+        grid.reposition();
         grid.save();
         grid.hasChanged = true;
     }
     grid.update = function () {
         grid.editRow();
+        grid.reposition();
         grid.save();
         if (grid.previousValue !== grid.value) grid.hasChanged = true;
     }
     grid.delete = function () {
         grid.deleteRow();
+        grid.reposition();
         grid.save();
         grid.hasChanged = true;
     }
@@ -473,15 +474,13 @@ function Grid(hiddenField) {
     }
     grid.restore = function () {
         grid.reload(grid.previousValue);
-        if (grid.beforeReloadTop) grid.top = grid.beforeReloadTop;
-        if (grid.beforeReloadLeft) grid.left = grid.beforeReloadLeft;
+        grid.reposition();
     }
     /** 只顯示(避免寫入XML造成資料異動,開啟時顯示單身筆數錯誤異常) */
     grid.display = function (data) {
         if (data) {
             grid.reload(eval(data));
-            if (grid.beforeReloadTop) grid.top = grid.beforeReloadTop;
-            if (grid.beforeReloadLeft) grid.left = grid.beforeReloadLeft;
+            grid.reposition();
         }
     }
     grid.getDuplicateRowIndex = function (excludeSelectedRow, columnIds) {
@@ -559,6 +558,10 @@ function Grid(hiddenField) {
         }
 
         return duplicateRowIndex;
+    }
+    grid.reposition = function () {
+        if (grid.beforeReloadTop) grid.top = grid.beforeReloadTop;
+        if (grid.beforeReloadLeft) grid.left = grid.beforeReloadLeft;
     }
     grid.previousValue = grid.value; //用於onchange事件+對話框confirm(),當使用者取消時可由此屬性取回之前的值
 
