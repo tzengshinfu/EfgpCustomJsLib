@@ -1650,6 +1650,13 @@ function RadioButton(radioButton) {
             }
         });
     }
+    radioButton.hideButton = function (text, value) {
+        Array.apply(null, radioButton.buttonControls).forEach(function (button) {
+            if (button.value === value || button.getAttribute("text") === text) {
+                button.style.display = 'none';
+            }
+        });
+    }
 
     //依狀態更新顯示外觀
     radioButton.enabled = radioButton.enabled;
