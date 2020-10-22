@@ -15,9 +15,9 @@
 	}
 }(function( $ ) {
 
-__jQuery.ui = __jQuery.ui || {};
+jBPM.ui = jBPM.ui || {};
 
-var version = __jQuery.ui.version = "1.12.1";
+var version = jBPM.ui.version = "1.12.1";
 
 
 /*!
@@ -40,16 +40,16 @@ var version = __jQuery.ui.version = "1.12.1";
 var widgetUuid = 0;
 var widgetSlice = Array.prototype.slice;
 
-__jQuery.cleanData = ( function( orig ) {
+jBPM.cleanData = ( function( orig ) {
 	return function( elems ) {
 		var events, elem, i;
 		for ( i = 0; ( elem = elems[ i ] ) != null; i++ ) {
 			try {
 
 				// Only trigger remove when necessary to save time
-				events = __jQuery._data( elem, "events" );
+				events = jBPM._data( elem, "events" );
 				if ( events && events.remove ) {
-					__jQuery( elem ).triggerHandler( "remove" );
+					jBPM( elem ).triggerHandler( "remove" );
 				}
 
 			// Http://bugs.jquery.com/ticket/8235
@@ -57,9 +57,9 @@ __jQuery.cleanData = ( function( orig ) {
 		}
 		orig( elems );
 	};
-} )( __jQuery.cleanData );
+} )( jBPM.cleanData );
 
-__jQuery.widget = function( name, base, prototype ) {
+jBPM.widget = function( name, base, prototype ) {
 	var existingConstructor, constructor, basePrototype;
 
 	// ProxiedPrototype allows the provided prototype to remain unmodified
@@ -72,21 +72,21 @@ __jQuery.widget = function( name, base, prototype ) {
 
 	if ( !prototype ) {
 		prototype = base;
-		base = __jQuery.Widget;
+		base = jBPM.Widget;
 	}
 
-	if ( __jQuery.isArray( prototype ) ) {
-		prototype = __jQuery.extend.apply( null, [ {} ].concat( prototype ) );
+	if ( jBPM.isArray( prototype ) ) {
+		prototype = jBPM.extend.apply( null, [ {} ].concat( prototype ) );
 	}
 
 	// Create selector for plugin
-	__jQuery.expr[ ":" ][ fullName.toLowerCase() ] = function( elem ) {
-		return !!__jQuery.data( elem, fullName );
+	jBPM.expr[ ":" ][ fullName.toLowerCase() ] = function( elem ) {
+		return !!jBPM.data( elem, fullName );
 	};
 
-	__jQuery[ namespace ] = __jQuery[ namespace ] || {};
-	existingConstructor = __jQuery[ namespace ][ name ];
-	constructor = __jQuery[ namespace ][ name ] = function( options, element ) {
+	jBPM[ namespace ] = jBPM[ namespace ] || {};
+	existingConstructor = jBPM[ namespace ][ name ];
+	constructor = jBPM[ namespace ][ name ] = function( options, element ) {
 
 		// Allow instantiation without "new" keyword
 		if ( !this._createWidget ) {
@@ -101,12 +101,12 @@ __jQuery.widget = function( name, base, prototype ) {
 	};
 
 	// Extend with the existing constructor to carry over any static properties
-	__jQuery.extend( constructor, existingConstructor, {
+	jBPM.extend( constructor, existingConstructor, {
 		version: prototype.version,
 
 		// Copy the object used to create the prototype in case we need to
 		// redefine the widget later
-		_proto: __jQuery.extend( {}, prototype ),
+		_proto: jBPM.extend( {}, prototype ),
 
 		// Track widgets that inherit from this widget in case this widget is
 		// redefined after a widget inherits from it
@@ -118,9 +118,9 @@ __jQuery.widget = function( name, base, prototype ) {
 	// We need to make the options hash a property directly on the new instance
 	// otherwise we'll modify the options hash on the prototype that we're
 	// inheriting from
-	basePrototype.options = __jQuery.widget.extend( {}, basePrototype.options );
-	__jQuery.each( prototype, function( prop, value ) {
-		if ( !__jQuery.isFunction( value ) ) {
+	basePrototype.options = jBPM.widget.extend( {}, basePrototype.options );
+	jBPM.each( prototype, function( prop, value ) {
+		if ( !jBPM.isFunction( value ) ) {
 			proxiedPrototype[ prop ] = value;
 			return;
 		}
@@ -150,7 +150,7 @@ __jQuery.widget = function( name, base, prototype ) {
 			};
 		} )();
 	} );
-	constructor.prototype = __jQuery.widget.extend( basePrototype, {
+	constructor.prototype = jBPM.widget.extend( basePrototype, {
 
 		// TODO: remove support for widgetEventPrefix
 		// always use the name + a colon as the prefix, e.g., draggable:start
@@ -168,12 +168,12 @@ __jQuery.widget = function( name, base, prototype ) {
 	// the new version of this widget. We're essentially trying to replace one
 	// level in the prototype chain.
 	if ( existingConstructor ) {
-		__jQuery.each( existingConstructor._childConstructors, function( i, child ) {
+		jBPM.each( existingConstructor._childConstructors, function( i, child ) {
 			var childPrototype = child.prototype;
 
 			// Redefine the child widget using the same prototype that was
 			// originally used, but inherit from the new version of the base
-			__jQuery.widget( childPrototype.namespace + "." + childPrototype.widgetName, constructor,
+			jBPM.widget( childPrototype.namespace + "." + childPrototype.widgetName, constructor,
 				child._proto );
 		} );
 
@@ -184,12 +184,12 @@ __jQuery.widget = function( name, base, prototype ) {
 		base._childConstructors.push( constructor );
 	}
 
-	__jQuery.widget.bridge( name, constructor );
+	jBPM.widget.bridge( name, constructor );
 
 	return constructor;
 };
 
-__jQuery.widget.extend = function( target ) {
+jBPM.widget.extend = function( target ) {
 	var input = widgetSlice.call( arguments, 1 );
 	var inputIndex = 0;
 	var inputLength = input.length;
@@ -202,12 +202,12 @@ __jQuery.widget.extend = function( target ) {
 			if ( input[ inputIndex ].hasOwnProperty( key ) && value !== undefined ) {
 
 				// Clone objects
-				if ( __jQuery.isPlainObject( value ) ) {
-					target[ key ] = __jQuery.isPlainObject( target[ key ] ) ?
-						__jQuery.widget.extend( {}, target[ key ], value ) :
+				if ( jBPM.isPlainObject( value ) ) {
+					target[ key ] = jBPM.isPlainObject( target[ key ] ) ?
+						jBPM.widget.extend( {}, target[ key ], value ) :
 
 						// Don't extend strings, arrays, etc. with objects
-						__jQuery.widget.extend( {}, value );
+						jBPM.widget.extend( {}, value );
 
 				// Copy everything else by reference
 				} else {
@@ -219,9 +219,9 @@ __jQuery.widget.extend = function( target ) {
 	return target;
 };
 
-__jQuery.widget.bridge = function( name, object ) {
+jBPM.widget.bridge = function( name, object ) {
 	var fullName = object.prototype.widgetFullName || name;
-	__jQuery.fn[ name ] = function( options ) {
+	jBPM.fn[ name ] = function( options ) {
 		var isMethodCall = typeof options === "string";
 		var args = widgetSlice.call( arguments, 1 );
 		var returnValue = this;
@@ -235,7 +235,7 @@ __jQuery.widget.bridge = function( name, object ) {
 			} else {
 				this.each( function() {
 					var methodValue;
-					var instance = __jQuery.data( this, fullName );
+					var instance = jBPM.data( this, fullName );
 
 					if ( options === "instance" ) {
 						returnValue = instance;
@@ -243,13 +243,13 @@ __jQuery.widget.bridge = function( name, object ) {
 					}
 
 					if ( !instance ) {
-						return __jQuery.error( "cannot call methods on " + name +
+						return jBPM.error( "cannot call methods on " + name +
 							" prior to initialization; " +
 							"attempted to call method '" + options + "'" );
 					}
 
-					if ( !__jQuery.isFunction( instance[ options ] ) || options.charAt( 0 ) === "_" ) {
-						return __jQuery.error( "no such method '" + options + "' for " + name +
+					if ( !jBPM.isFunction( instance[ options ] ) || options.charAt( 0 ) === "_" ) {
+						return jBPM.error( "no such method '" + options + "' for " + name +
 							" widget instance" );
 					}
 
@@ -267,18 +267,18 @@ __jQuery.widget.bridge = function( name, object ) {
 
 			// Allow multiple hashes to be passed on init
 			if ( args.length ) {
-				options = __jQuery.widget.extend.apply( null, [ options ].concat( args ) );
+				options = jBPM.widget.extend.apply( null, [ options ].concat( args ) );
 			}
 
 			this.each( function() {
-				var instance = __jQuery.data( this, fullName );
+				var instance = jBPM.data( this, fullName );
 				if ( instance ) {
 					instance.option( options || {} );
 					if ( instance._init ) {
 						instance._init();
 					}
 				} else {
-					__jQuery.data( this, fullName, new object( options, this ) );
+					jBPM.data( this, fullName, new object( options, this ) );
 				}
 			} );
 		}
@@ -287,10 +287,10 @@ __jQuery.widget.bridge = function( name, object ) {
 	};
 };
 
-__jQuery.Widget = function( /* options, element */ ) {};
-__jQuery.Widget._childConstructors = [];
+jBPM.Widget = function( /* options, element */ ) {};
+jBPM.Widget._childConstructors = [];
 
-__jQuery.Widget.prototype = {
+jBPM.Widget.prototype = {
 	widgetName: "widget",
 	widgetEventPrefix: "",
 	defaultElement: "<div>",
@@ -304,18 +304,18 @@ __jQuery.Widget.prototype = {
 	},
 
 	_createWidget: function( options, element ) {
-		element = __jQuery( element || this.defaultElement || this )[ 0 ];
-		this.element = __jQuery( element );
+		element = jBPM( element || this.defaultElement || this )[ 0 ];
+		this.element = jBPM( element );
 		this.uuid = widgetUuid++;
 		this.eventNamespace = "." + this.widgetName + this.uuid;
 
-		this.bindings = __jQuery();
-		this.hoverable = __jQuery();
-		this.focusable = __jQuery();
+		this.bindings = jBPM();
+		this.hoverable = jBPM();
+		this.focusable = jBPM();
 		this.classesElementLookup = {};
 
 		if ( element !== this ) {
-			__jQuery.data( element, this.widgetFullName, this );
+			jBPM.data( element, this.widgetFullName, this );
 			this._on( true, this.element, {
 				remove: function( event ) {
 					if ( event.target === element ) {
@@ -323,17 +323,17 @@ __jQuery.Widget.prototype = {
 					}
 				}
 			} );
-			this.document = __jQuery( element.style ?
+			this.document = jBPM( element.style ?
 
 				// Element within the document
 				element.ownerDocument :
 
 				// Element is window or document
 				element.document || element );
-			this.window = __jQuery( this.document[ 0 ].defaultView || this.document[ 0 ].parentWindow );
+			this.window = jBPM( this.document[ 0 ].defaultView || this.document[ 0 ].parentWindow );
 		}
 
-		this.options = __jQuery.widget.extend( {},
+		this.options = jBPM.widget.extend( {},
 			this.options,
 			this._getCreateOptions(),
 			options );
@@ -352,17 +352,17 @@ __jQuery.Widget.prototype = {
 		return {};
 	},
 
-	_getCreateEventData: __jQuery.noop,
+	_getCreateEventData: jBPM.noop,
 
-	_create: __jQuery.noop,
+	_create: jBPM.noop,
 
-	_init: __jQuery.noop,
+	_init: jBPM.noop,
 
 	destroy: function() {
 		var that = this;
 
 		this._destroy();
-		__jQuery.each( this.classesElementLookup, function( key, value ) {
+		jBPM.each( this.classesElementLookup, function( key, value ) {
 			that._removeClass( value, key );
 		} );
 
@@ -379,7 +379,7 @@ __jQuery.Widget.prototype = {
 		this.bindings.off( this.eventNamespace );
 	},
 
-	_destroy: __jQuery.noop,
+	_destroy: jBPM.noop,
 
 	widget: function() {
 		return this.element;
@@ -394,7 +394,7 @@ __jQuery.Widget.prototype = {
 		if ( arguments.length === 0 ) {
 
 			// Don't return a reference to the internal hash
-			return __jQuery.widget.extend( {}, this.options );
+			return jBPM.widget.extend( {}, this.options );
 		}
 
 		if ( typeof key === "string" ) {
@@ -404,7 +404,7 @@ __jQuery.Widget.prototype = {
 			parts = key.split( "." );
 			key = parts.shift();
 			if ( parts.length ) {
-				curOption = options[ key ] = __jQuery.widget.extend( {}, this.options[ key ] );
+				curOption = options[ key ] = jBPM.widget.extend( {}, this.options[ key ] );
 				for ( i = 0; i < parts.length - 1; i++ ) {
 					curOption[ parts[ i ] ] = curOption[ parts[ i ] ] || {};
 					curOption = curOption[ parts[ i ] ];
@@ -466,7 +466,7 @@ __jQuery.Widget.prototype = {
 			// on the next line is going to destroy the reference to the current elements being
 			// tracked. We need to save a copy of this collection so that we can add the new classes
 			// below.
-			elements = __jQuery( currentElements.get() );
+			elements = jBPM( currentElements.get() );
 			this._removeClass( currentElements, classKey );
 
 			// We don't use _addClass() here, because that uses this.options.classes
@@ -504,7 +504,7 @@ __jQuery.Widget.prototype = {
 		var full = [];
 		var that = this;
 
-		options = __jQuery.extend( {
+		options = jBPM.extend( {
 			element: this.element,
 			classes: this.options.classes || {}
 		}, options );
@@ -512,11 +512,11 @@ __jQuery.Widget.prototype = {
 		function processClassString( classes, checkOption ) {
 			var current, i;
 			for ( i = 0; i < classes.length; i++ ) {
-				current = that.classesElementLookup[ classes[ i ] ] || __jQuery();
+				current = that.classesElementLookup[ classes[ i ] ] || jBPM();
 				if ( options.add ) {
-					current = __jQuery( __jQuery.unique( current.get().concat( options.element.get() ) ) );
+					current = jBPM( jBPM.unique( current.get().concat( options.element.get() ) ) );
 				} else {
-					current = __jQuery( current.not( options.element ).get() );
+					current = jBPM( current.not( options.element ).get() );
 				}
 				that.classesElementLookup[ classes[ i ] ] = current;
 				full.push( classes[ i ] );
@@ -542,9 +542,9 @@ __jQuery.Widget.prototype = {
 
 	_untrackClassesElement: function( event ) {
 		var that = this;
-		__jQuery.each( that.classesElementLookup, function( key, value ) {
-			if ( __jQuery.inArray( event.target, value ) !== -1 ) {
-				that.classesElementLookup[ key ] = __jQuery( value.not( event.target ).get() );
+		jBPM.each( that.classesElementLookup, function( key, value ) {
+			if ( jBPM.inArray( event.target, value ) !== -1 ) {
+				that.classesElementLookup[ key ] = jBPM( value.not( event.target ).get() );
 			}
 		} );
 	},
@@ -587,11 +587,11 @@ __jQuery.Widget.prototype = {
 			element = this.element;
 			delegateElement = this.widget();
 		} else {
-			element = delegateElement = __jQuery( element );
+			element = delegateElement = jBPM( element );
 			this.bindings = this.bindings.add( element );
 		}
 
-		__jQuery.each( handlers, function( event, handler ) {
+		jBPM.each( handlers, function( event, handler ) {
 			function handlerProxy() {
 
 				// Allow widgets to customize the disabled handling
@@ -599,7 +599,7 @@ __jQuery.Widget.prototype = {
 				// - disabled class as method for disabling individual parts
 				if ( !suppressDisabledCheck &&
 						( instance.options.disabled === true ||
-						__jQuery( this ).hasClass( "ui-state-disabled" ) ) ) {
+						jBPM( this ).hasClass( "ui-state-disabled" ) ) ) {
 					return;
 				}
 				return ( typeof handler === "string" ? instance[ handler ] : handler )
@@ -609,7 +609,7 @@ __jQuery.Widget.prototype = {
 			// Copy the guid so direct unbinding works
 			if ( typeof handler !== "string" ) {
 				handlerProxy.guid = handler.guid =
-					handler.guid || handlerProxy.guid || __jQuery.guid++;
+					handler.guid || handlerProxy.guid || jBPM.guid++;
 			}
 
 			var match = event.match( /^([\w:-]*)\s*(.*)$/ );
@@ -630,9 +630,9 @@ __jQuery.Widget.prototype = {
 		element.off( eventName ).off( eventName );
 
 		// Clear the stack to avoid memory leaks (#10056)
-		this.bindings = __jQuery( this.bindings.not( element ).get() );
-		this.focusable = __jQuery( this.focusable.not( element ).get() );
-		this.hoverable = __jQuery( this.hoverable.not( element ).get() );
+		this.bindings = jBPM( this.bindings.not( element ).get() );
+		this.focusable = jBPM( this.focusable.not( element ).get() );
+		this.hoverable = jBPM( this.hoverable.not( element ).get() );
 	},
 
 	_delay: function( handler, delay ) {
@@ -648,10 +648,10 @@ __jQuery.Widget.prototype = {
 		this.hoverable = this.hoverable.add( element );
 		this._on( element, {
 			mouseenter: function( event ) {
-				this._addClass( __jQuery( event.currentTarget ), null, "ui-state-hover" );
+				this._addClass( jBPM( event.currentTarget ), null, "ui-state-hover" );
 			},
 			mouseleave: function( event ) {
-				this._removeClass( __jQuery( event.currentTarget ), null, "ui-state-hover" );
+				this._removeClass( jBPM( event.currentTarget ), null, "ui-state-hover" );
 			}
 		} );
 	},
@@ -660,10 +660,10 @@ __jQuery.Widget.prototype = {
 		this.focusable = this.focusable.add( element );
 		this._on( element, {
 			focusin: function( event ) {
-				this._addClass( __jQuery( event.currentTarget ), null, "ui-state-focus" );
+				this._addClass( jBPM( event.currentTarget ), null, "ui-state-focus" );
 			},
 			focusout: function( event ) {
-				this._removeClass( __jQuery( event.currentTarget ), null, "ui-state-focus" );
+				this._removeClass( jBPM( event.currentTarget ), null, "ui-state-focus" );
 			}
 		} );
 	},
@@ -673,7 +673,7 @@ __jQuery.Widget.prototype = {
 		var callback = this.options[ type ];
 
 		data = data || {};
-		event = __jQuery.Event( event );
+		event = jBPM.Event( event );
 		event.type = ( type === this.widgetEventPrefix ?
 			type :
 			this.widgetEventPrefix + type ).toLowerCase();
@@ -693,14 +693,14 @@ __jQuery.Widget.prototype = {
 		}
 
 		this.element.trigger( event, data );
-		return !( __jQuery.isFunction( callback ) &&
+		return !( jBPM.isFunction( callback ) &&
 			callback.apply( this.element[ 0 ], [ event ].concat( data ) ) === false ||
 			event.isDefaultPrevented() );
 	}
 };
 
-__jQuery.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
-	__jQuery.Widget.prototype[ "_" + method ] = function( element, options, callback ) {
+jBPM.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
+	jBPM.Widget.prototype[ "_" + method ] = function( element, options, callback ) {
 		if ( typeof options === "string" ) {
 			options = { effect: options };
 		}
@@ -717,20 +717,20 @@ __jQuery.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEff
 			options = { duration: options };
 		}
 
-		hasOptions = !__jQuery.isEmptyObject( options );
+		hasOptions = !jBPM.isEmptyObject( options );
 		options.complete = callback;
 
 		if ( options.delay ) {
 			element.delay( options.delay );
 		}
 
-		if ( hasOptions && __jQuery.effects && __jQuery.effects.effect[ effectName ] ) {
+		if ( hasOptions && jBPM.effects && jBPM.effects.effect[ effectName ] ) {
 			element[ method ]( options );
 		} else if ( effectName !== method && element[ effectName ] ) {
 			element[ effectName ]( options.duration, options.easing, callback );
 		} else {
 			element.queue( function( next ) {
-				__jQuery( this )[ method ]();
+				jBPM( this )[ method ]();
 				if ( callback ) {
 					callback.call( element[ 0 ] );
 				}
@@ -740,7 +740,7 @@ __jQuery.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEff
 	};
 } );
 
-var widget = __jQuery.widget;
+var widget = jBPM.widget;
 
 
 /*!
@@ -770,7 +770,7 @@ var cachedScrollbarWidth,
 	roffset = /[\+\-]\d+(\.[\d]+)?%?/,
 	rposition = /^\w+/,
 	rpercent = /%$/,
-	_position = __jQuery.fn.position;
+	_position = jBPM.fn.position;
 
 function getOffsets( offsets, width, height ) {
 	return [
@@ -780,7 +780,7 @@ function getOffsets( offsets, width, height ) {
 }
 
 function parseCss( element, property ) {
-	return parseInt( __jQuery.css( element, property ), 10 ) || 0;
+	return parseInt( jBPM.css( element, property ), 10 ) || 0;
 }
 
 function getDimensions( elem ) {
@@ -792,7 +792,7 @@ function getDimensions( elem ) {
 			offset: { top: 0, left: 0 }
 		};
 	}
-	if ( __jQuery.isWindow( raw ) ) {
+	if ( jBPM.isWindow( raw ) ) {
 		return {
 			width: elem.width(),
 			height: elem.height(),
@@ -813,18 +813,18 @@ function getDimensions( elem ) {
 	};
 }
 
-__jQuery.position = {
+jBPM.position = {
 	scrollbarWidth: function() {
 		if ( cachedScrollbarWidth !== undefined ) {
 			return cachedScrollbarWidth;
 		}
 		var w1, w2,
-			div = __jQuery( "<div " +
+			div = jBPM( "<div " +
 				"style='display:block;position:absolute;width:50px;height:50px;overflow:hidden;'>" +
 				"<div style='height:100px;width:auto;'></div></div>" ),
 			innerDiv = div.children()[ 0 ];
 
-		__jQuery( "body" ).append( div );
+		jBPM( "body" ).append( div );
 		w1 = innerDiv.offsetWidth;
 		div.css( "overflow", "scroll" );
 
@@ -848,20 +848,20 @@ __jQuery.position = {
 			hasOverflowY = overflowY === "scroll" ||
 				( overflowY === "auto" && within.height < within.element[ 0 ].scrollHeight );
 		return {
-			width: hasOverflowY ? __jQuery.position.scrollbarWidth() : 0,
-			height: hasOverflowX ? __jQuery.position.scrollbarWidth() : 0
+			width: hasOverflowY ? jBPM.position.scrollbarWidth() : 0,
+			height: hasOverflowX ? jBPM.position.scrollbarWidth() : 0
 		};
 	},
 	getWithinInfo: function( element ) {
-		var withinElement = __jQuery( element || window ),
-			isWindow = __jQuery.isWindow( withinElement[ 0 ] ),
+		var withinElement = jBPM( element || window ),
+			isWindow = jBPM.isWindow( withinElement[ 0 ] ),
 			isDocument = !!withinElement[ 0 ] && withinElement[ 0 ].nodeType === 9,
 			hasOffset = !isWindow && !isDocument;
 		return {
 			element: withinElement,
 			isWindow: isWindow,
 			isDocument: isDocument,
-			offset: hasOffset ? __jQuery( element ).offset() : { left: 0, top: 0 },
+			offset: hasOffset ? jBPM( element ).offset() : { left: 0, top: 0 },
 			scrollLeft: withinElement.scrollLeft(),
 			scrollTop: withinElement.scrollTop(),
 			width: withinElement.outerWidth(),
@@ -870,18 +870,18 @@ __jQuery.position = {
 	}
 };
 
-__jQuery.fn.position = function( options ) {
+jBPM.fn.position = function( options ) {
 	if ( !options || !options.of ) {
 		return _position.apply( this, arguments );
 	}
 
 	// Make a copy, we don't want to modify arguments
-	options = __jQuery.extend( {}, options );
+	options = jBPM.extend( {}, options );
 
 	var atOffset, targetWidth, targetHeight, targetOffset, basePosition, dimensions,
-		target = __jQuery( options.of ),
-		within = __jQuery.position.getWithinInfo( options.within ),
-		scrollInfo = __jQuery.position.getScrollInfo( within ),
+		target = jBPM( options.of ),
+		within = jBPM.position.getWithinInfo( options.within ),
+		scrollInfo = jBPM.position.getScrollInfo( within ),
 		collision = ( options.collision || "flip" ).split( " " ),
 		offsets = {};
 
@@ -896,11 +896,11 @@ __jQuery.fn.position = function( options ) {
 	targetOffset = dimensions.offset;
 
 	// Clone to reuse original targetOffset later
-	basePosition = __jQuery.extend( {}, targetOffset );
+	basePosition = jBPM.extend( {}, targetOffset );
 
 	// Force my and at to have valid horizontal and vertical positions
 	// if a value is missing or invalid, it will be converted to center
-	__jQuery.each( [ "my", "at" ], function() {
+	jBPM.each( [ "my", "at" ], function() {
 		var pos = ( options[ this ] || "" ).split( " " ),
 			horizontalOffset,
 			verticalOffset;
@@ -953,7 +953,7 @@ __jQuery.fn.position = function( options ) {
 
 	return this.each( function() {
 		var collisionPosition, using,
-			elem = __jQuery( this ),
+			elem = jBPM( this ),
 			elemWidth = elem.outerWidth(),
 			elemHeight = elem.outerHeight(),
 			marginLeft = parseCss( this, "marginLeft" ),
@@ -962,7 +962,7 @@ __jQuery.fn.position = function( options ) {
 				scrollInfo.width,
 			collisionHeight = elemHeight + marginTop + parseCss( this, "marginBottom" ) +
 				scrollInfo.height,
-			position = __jQuery.extend( {}, basePosition ),
+			position = jBPM.extend( {}, basePosition ),
 			myOffset = getOffsets( offsets.my, elem.outerWidth(), elem.outerHeight() );
 
 		if ( options.my[ 0 ] === "right" ) {
@@ -985,9 +985,9 @@ __jQuery.fn.position = function( options ) {
 			marginTop: marginTop
 		};
 
-		__jQuery.each( [ "left", "top" ], function( i, dir ) {
-			if ( __jQuery.ui.position[ collision[ i ] ] ) {
-				__jQuery.ui.position[ collision[ i ] ][ dir ]( position, {
+		jBPM.each( [ "left", "top" ], function( i, dir ) {
+			if ( jBPM.ui.position[ collision[ i ] ] ) {
+				jBPM.ui.position[ collision[ i ] ][ dir ]( position, {
 					targetWidth: targetWidth,
 					targetHeight: targetHeight,
 					elemWidth: elemWidth,
@@ -1045,11 +1045,11 @@ __jQuery.fn.position = function( options ) {
 			};
 		}
 
-		elem.offset( __jQuery.extend( position, { using: using } ) );
+		elem.offset( jBPM.extend( position, { using: using } ) );
 	} );
 };
 
-__jQuery.ui.position = {
+jBPM.ui.position = {
 	fit: {
 		left: function( position, data ) {
 			var within = data.within,
@@ -1216,19 +1216,19 @@ __jQuery.ui.position = {
 	},
 	flipfit: {
 		left: function() {
-			__jQuery.ui.position.flip.left.apply( this, arguments );
-			__jQuery.ui.position.fit.left.apply( this, arguments );
+			jBPM.ui.position.flip.left.apply( this, arguments );
+			jBPM.ui.position.fit.left.apply( this, arguments );
 		},
 		top: function() {
-			__jQuery.ui.position.flip.top.apply( this, arguments );
-			__jQuery.ui.position.fit.top.apply( this, arguments );
+			jBPM.ui.position.flip.top.apply( this, arguments );
+			jBPM.ui.position.fit.top.apply( this, arguments );
 		}
 	}
 };
 
 } )();
 
-var position = __jQuery.ui.position;
+var position = jBPM.ui.position;
 
 
 /*!
@@ -1246,17 +1246,17 @@ var position = __jQuery.ui.position;
 //>>docs: http://api.jqueryui.com/data-selector/
 
 
-var data = __jQuery.extend( __jQuery.expr[ ":" ], {
-	data: __jQuery.expr.createPseudo ?
-		__jQuery.expr.createPseudo( function( dataName ) {
+var data = jBPM.extend( jBPM.expr[ ":" ], {
+	data: jBPM.expr.createPseudo ?
+		jBPM.expr.createPseudo( function( dataName ) {
 			return function( elem ) {
-				return !!__jQuery.data( elem, dataName );
+				return !!jBPM.data( elem, dataName );
 			};
 		} ) :
 
 		// Support: jQuery <1.8
 		function( elem, i, match ) {
-			return !!__jQuery.data( elem, match[ 3 ] );
+			return !!jBPM.data( elem, match[ 3 ] );
 		}
 } );
 
@@ -1277,7 +1277,7 @@ var data = __jQuery.extend( __jQuery.expr[ ":" ], {
 // This file is deprecated
 
 
-var disableSelection = __jQuery.fn.extend( {
+var disableSelection = jBPM.fn.extend( {
 	disableSelection: ( function() {
 		var eventType = "onselectstart" in document.createElement( "div" ) ?
 			"selectstart" :
@@ -1313,7 +1313,7 @@ var disableSelection = __jQuery.fn.extend( {
 
 
 // Selectors
-__jQuery.ui.focusable = function( element, hasTabindex ) {
+jBPM.ui.focusable = function( element, hasTabindex ) {
 	var map, mapName, img, focusableIfVisible, fieldset,
 		nodeName = element.nodeName.toLowerCase();
 
@@ -1323,7 +1323,7 @@ __jQuery.ui.focusable = function( element, hasTabindex ) {
 		if ( !element.href || !mapName || map.nodeName.toLowerCase() !== "map" ) {
 			return false;
 		}
-		img = __jQuery( "img[usemap='#" + mapName + "']" );
+		img = jBPM( "img[usemap='#" + mapName + "']" );
 		return img.length > 0 && img.is( ":visible" );
 	}
 
@@ -1336,7 +1336,7 @@ __jQuery.ui.focusable = function( element, hasTabindex ) {
 			// However, controls within the fieldset's legend do not get disabled.
 			// Since controls generally aren't placed inside legends, we skip
 			// this portion of the check.
-			fieldset = __jQuery( element ).closest( "fieldset" )[ 0 ];
+			fieldset = jBPM( element ).closest( "fieldset" )[ 0 ];
 			if ( fieldset ) {
 				focusableIfVisible = !fieldset.disabled;
 			}
@@ -1347,7 +1347,7 @@ __jQuery.ui.focusable = function( element, hasTabindex ) {
 		focusableIfVisible = hasTabindex;
 	}
 
-	return focusableIfVisible && __jQuery( element ).is( ":visible" ) && visible( __jQuery( element ) );
+	return focusableIfVisible && jBPM( element ).is( ":visible" ) && visible( jBPM( element ) );
 };
 
 // Support: IE 8 only
@@ -1361,13 +1361,13 @@ function visible( element ) {
 	return visibility !== "hidden";
 }
 
-__jQuery.extend( __jQuery.expr[ ":" ], {
+jBPM.extend( jBPM.expr[ ":" ], {
 	focusable: function( element ) {
-		return __jQuery.ui.focusable( element, __jQuery.attr( element, "tabindex" ) != null );
+		return jBPM.ui.focusable( element, jBPM.attr( element, "tabindex" ) != null );
 	}
 } );
 
-var focusable = __jQuery.ui.focusable;
+var focusable = jBPM.ui.focusable;
 
 
 
@@ -1375,8 +1375,8 @@ var focusable = __jQuery.ui.focusable;
 // Support: IE8 Only
 // IE8 does not support the form attribute and when it is supplied. It overwrites the form prop
 // with a string, so we need to find the proper form.
-var form = __jQuery.fn.form = function() {
-	return typeof this[ 0 ].form === "string" ? this.closest( "form" ) : __jQuery( this[ 0 ].form );
+var form = jBPM.fn.form = function() {
+	return typeof this[ 0 ].form === "string" ? this.closest( "form" ) : jBPM( this[ 0 ].form );
 };
 
 
@@ -1396,14 +1396,14 @@ var form = __jQuery.fn.form = function() {
 
 
 
-var formResetMixin = __jQuery.ui.formResetMixin = {
+var formResetMixin = jBPM.ui.formResetMixin = {
 	_formResetHandler: function() {
-		var form = __jQuery( this );
+		var form = jBPM( this );
 
 		// Wait for the form reset to actually happen before refreshing
 		setTimeout( function() {
 			var instances = form.data( "ui-form-reset-instances" );
-			__jQuery.each( instances, function() {
+			jBPM.each( instances, function() {
 				this.refresh();
 			} );
 		} );
@@ -1431,7 +1431,7 @@ var formResetMixin = __jQuery.ui.formResetMixin = {
 		}
 
 		var instances = this.form.data( "ui-form-reset-instances" );
-		instances.splice( __jQuery.inArray( this, instances ), 1 );
+		instances.splice( jBPM.inArray( this, instances ), 1 );
 		if ( instances.length ) {
 			this.form.data( "ui-form-reset-instances", instances );
 		} else {
@@ -1465,56 +1465,56 @@ var formResetMixin = __jQuery.ui.formResetMixin = {
 // for "1.7." would be a bit safer, but the version string is 1.7, not 1.7.0
 // and we'll never reach 1.70.0 (if we do, we certainly won't be supporting
 // 1.7 anymore). See #11197 for why we're not using feature detection.
-if ( __jQuery.fn.jquery.substring( 0, 3 ) === "1.7" ) {
+if ( jBPM.fn.jquery.substring( 0, 3 ) === "1.7" ) {
 
 	// Setters for .innerWidth(), .innerHeight(), .outerWidth(), .outerHeight()
 	// Unlike jQuery Core 1.8+, these only support numeric values to set the
 	// dimensions in pixels
-	__jQuery.each( [ "Width", "Height" ], function( i, name ) {
+	jBPM.each( [ "Width", "Height" ], function( i, name ) {
 		var side = name === "Width" ? [ "Left", "Right" ] : [ "Top", "Bottom" ],
 			type = name.toLowerCase(),
 			orig = {
-				innerWidth: __jQuery.fn.innerWidth,
-				innerHeight: __jQuery.fn.innerHeight,
-				outerWidth: __jQuery.fn.outerWidth,
-				outerHeight: __jQuery.fn.outerHeight
+				innerWidth: jBPM.fn.innerWidth,
+				innerHeight: jBPM.fn.innerHeight,
+				outerWidth: jBPM.fn.outerWidth,
+				outerHeight: jBPM.fn.outerHeight
 			};
 
 		function reduce( elem, size, border, margin ) {
-			__jQuery.each( side, function() {
-				size -= parseFloat( __jQuery.css( elem, "padding" + this ) ) || 0;
+			jBPM.each( side, function() {
+				size -= parseFloat( jBPM.css( elem, "padding" + this ) ) || 0;
 				if ( border ) {
-					size -= parseFloat( __jQuery.css( elem, "border" + this + "Width" ) ) || 0;
+					size -= parseFloat( jBPM.css( elem, "border" + this + "Width" ) ) || 0;
 				}
 				if ( margin ) {
-					size -= parseFloat( __jQuery.css( elem, "margin" + this ) ) || 0;
+					size -= parseFloat( jBPM.css( elem, "margin" + this ) ) || 0;
 				}
 			} );
 			return size;
 		}
 
-		__jQuery.fn[ "inner" + name ] = function( size ) {
+		jBPM.fn[ "inner" + name ] = function( size ) {
 			if ( size === undefined ) {
 				return orig[ "inner" + name ].call( this );
 			}
 
 			return this.each( function() {
-				__jQuery( this ).css( type, reduce( this, size ) + "px" );
+				jBPM( this ).css( type, reduce( this, size ) + "px" );
 			} );
 		};
 
-		__jQuery.fn[ "outer" + name ] = function( size, margin ) {
+		jBPM.fn[ "outer" + name ] = function( size, margin ) {
 			if ( typeof size !== "number" ) {
 				return orig[ "outer" + name ].call( this, size );
 			}
 
 			return this.each( function() {
-				__jQuery( this ).css( type, reduce( this, size, true, margin ) + "px" );
+				jBPM( this ).css( type, reduce( this, size, true, margin ) + "px" );
 			} );
 		};
 	} );
 
-	__jQuery.fn.addBack = function( selector ) {
+	jBPM.fn.addBack = function( selector ) {
 		return this.add( selector == null ?
 			this.prevObject : this.prevObject.filter( selector )
 		);
@@ -1537,7 +1537,7 @@ if ( __jQuery.fn.jquery.substring( 0, 3 ) === "1.7" ) {
 //>>docs: http://api.jqueryui.com/jQuery.ui.keyCode/
 
 
-var keycode = __jQuery.ui.keyCode = {
+var keycode = jBPM.ui.keyCode = {
 	BACKSPACE: 8,
 	COMMA: 188,
 	DELETE: 46,
@@ -1560,7 +1560,7 @@ var keycode = __jQuery.ui.keyCode = {
 
 
 // Internal use only
-var escapeSelector = __jQuery.ui.escapeSelector = ( function() {
+var escapeSelector = jBPM.ui.escapeSelector = ( function() {
 	var selectorEscape = /([!"#$%&'()*+,./:;<=>?@[\]^`{|}~])/g;
 	return function( selector ) {
 		return selector.replace( selectorEscape, "\\$1" );
@@ -1584,7 +1584,7 @@ var escapeSelector = __jQuery.ui.escapeSelector = ( function() {
 
 
 
-var labels = __jQuery.fn.labels = function() {
+var labels = jBPM.fn.labels = function() {
 	var ancestor, selector, id, labels, ancestors;
 
 	// Check control.labels first
@@ -1609,7 +1609,7 @@ var labels = __jQuery.fn.labels = function() {
 		ancestors = ancestor.add( ancestor.length ? ancestor.siblings() : this.siblings() );
 
 		// Create a selector for the label based on the id
-		selector = "label[for='" + __jQuery.ui.escapeSelector( id ) + "']";
+		selector = "label[for='" + jBPM.ui.escapeSelector( id ) + "']";
 
 		labels = labels.add( ancestors.find( selector ).addBack( selector ) );
 
@@ -1636,12 +1636,12 @@ var labels = __jQuery.fn.labels = function() {
 
 
 
-var scrollParent = __jQuery.fn.scrollParent = function( includeHidden ) {
+var scrollParent = jBPM.fn.scrollParent = function( includeHidden ) {
 	var position = this.css( "position" ),
 		excludeStaticParent = position === "absolute",
 		overflowRegex = includeHidden ? /(auto|scroll|hidden)/ : /(auto|scroll)/,
 		scrollParent = this.parents().filter( function() {
-			var parent = __jQuery( this );
+			var parent = jBPM( this );
 			if ( excludeStaticParent && parent.css( "position" ) === "static" ) {
 				return false;
 			}
@@ -1650,7 +1650,7 @@ var scrollParent = __jQuery.fn.scrollParent = function( includeHidden ) {
 		} ).eq( 0 );
 
 	return position === "fixed" || !scrollParent.length ?
-		__jQuery( this[ 0 ].ownerDocument || document ) :
+		jBPM( this[ 0 ].ownerDocument || document ) :
 		scrollParent;
 };
 
@@ -1671,11 +1671,11 @@ var scrollParent = __jQuery.fn.scrollParent = function( includeHidden ) {
 
 
 
-var tabbable = __jQuery.extend( __jQuery.expr[ ":" ], {
+var tabbable = jBPM.extend( jBPM.expr[ ":" ], {
 	tabbable: function( element ) {
-		var tabIndex = __jQuery.attr( element, "tabindex" ),
+		var tabIndex = jBPM.attr( element, "tabindex" ),
 			hasTabindex = tabIndex != null;
-		return ( !hasTabindex || tabIndex >= 0 ) && __jQuery.ui.focusable( element, hasTabindex );
+		return ( !hasTabindex || tabIndex >= 0 ) && jBPM.ui.focusable( element, hasTabindex );
 	}
 } );
 
@@ -1696,7 +1696,7 @@ var tabbable = __jQuery.extend( __jQuery.expr[ ":" ], {
 
 
 
-var uniqueId = __jQuery.fn.extend( {
+var uniqueId = jBPM.fn.extend( {
 	uniqueId: ( function() {
 		var uuid = 0;
 
@@ -1712,7 +1712,7 @@ var uniqueId = __jQuery.fn.extend( {
 	removeUniqueId: function() {
 		return this.each( function() {
 			if ( /^ui-id-\d+$/.test( this.id ) ) {
-				__jQuery( this ).removeAttr( "id" );
+				jBPM( this ).removeAttr( "id" );
 			}
 		} );
 	}
@@ -1722,7 +1722,7 @@ var uniqueId = __jQuery.fn.extend( {
 
 
 // This file is deprecated
-var ie = __jQuery.ui.ie = !!/msie [\w.]+/.exec( navigator.userAgent.toLowerCase() );
+var ie = jBPM.ui.ie = !!/msie [\w.]+/.exec( navigator.userAgent.toLowerCase() );
 
 /*!
  * jQuery UI Mouse 1.12.1
@@ -1741,11 +1741,11 @@ var ie = __jQuery.ui.ie = !!/msie [\w.]+/.exec( navigator.userAgent.toLowerCase(
 
 
 var mouseHandled = false;
-__jQuery( document ).on( "mouseup", function() {
+jBPM( document ).on( "mouseup", function() {
 	mouseHandled = false;
 } );
 
-var widgetsMouse = __jQuery.widget( "ui.mouse", {
+var widgetsMouse = jBPM.widget( "ui.mouse", {
 	version: "1.12.1",
 	options: {
 		cancel: "input, textarea, button, select, option",
@@ -1760,8 +1760,8 @@ var widgetsMouse = __jQuery.widget( "ui.mouse", {
 				return that._mouseDown( event );
 			} )
 			.on( "click." + this.widgetName, function( event ) {
-				if ( true === __jQuery.data( event.target, that.widgetName + ".preventClickEvent" ) ) {
-					__jQuery.removeData( event.target, that.widgetName + ".preventClickEvent" );
+				if ( true === jBPM.data( event.target, that.widgetName + ".preventClickEvent" ) ) {
+					jBPM.removeData( event.target, that.widgetName + ".preventClickEvent" );
 					event.stopImmediatePropagation();
 					return false;
 				}
@@ -1801,7 +1801,7 @@ var widgetsMouse = __jQuery.widget( "ui.mouse", {
 			// event.target.nodeName works around a bug in IE 8 with
 			// disabled inputs (#7620)
 			elIsCancel = ( typeof this.options.cancel === "string" && event.target.nodeName ?
-				__jQuery( event.target ).closest( this.options.cancel ).length : false );
+				jBPM( event.target ).closest( this.options.cancel ).length : false );
 		if ( !btnIsLeft || elIsCancel || !this._mouseCapture( event ) ) {
 			return true;
 		}
@@ -1822,8 +1822,8 @@ var widgetsMouse = __jQuery.widget( "ui.mouse", {
 		}
 
 		// Click event may never have fired (Gecko & Opera)
-		if ( true === __jQuery.data( event.target, this.widgetName + ".preventClickEvent" ) ) {
-			__jQuery.removeData( event.target, this.widgetName + ".preventClickEvent" );
+		if ( true === jBPM.data( event.target, this.widgetName + ".preventClickEvent" ) ) {
+			jBPM.removeData( event.target, this.widgetName + ".preventClickEvent" );
 		}
 
 		// These delegates are required to keep context
@@ -1853,7 +1853,7 @@ var widgetsMouse = __jQuery.widget( "ui.mouse", {
 		if ( this._mouseMoved ) {
 
 			// IE mouseup check - mouseup happened when mouse was out of window
-			if ( __jQuery.ui.ie && ( !document.documentMode || document.documentMode < 9 ) &&
+			if ( jBPM.ui.ie && ( !document.documentMode || document.documentMode < 9 ) &&
 					!event.button ) {
 				return this._mouseUp( event );
 
@@ -1899,7 +1899,7 @@ var widgetsMouse = __jQuery.widget( "ui.mouse", {
 			this._mouseStarted = false;
 
 			if ( event.target === this._mouseDownEvent.target ) {
-				__jQuery.data( event.target, this.widgetName + ".preventClickEvent", true );
+				jBPM.data( event.target, this.widgetName + ".preventClickEvent", true );
 			}
 
 			this._mouseStop( event );
@@ -1937,11 +1937,11 @@ var widgetsMouse = __jQuery.widget( "ui.mouse", {
 
 
 
-// __jQuery.ui.plugin is deprecated. Use __jQuery.widget() extensions instead.
-var plugin = __jQuery.ui.plugin = {
+// jBPM.ui.plugin is deprecated. Use jBPM.widget() extensions instead.
+var plugin = jBPM.ui.plugin = {
 	add: function( module, option, set ) {
 		var i,
-			proto = __jQuery.ui[ module ].prototype;
+			proto = jBPM.ui[ module ].prototype;
 		for ( i in set ) {
 			proto.plugins[ i ] = proto.plugins[ i ] || [];
 			proto.plugins[ i ].push( [ option, set[ i ] ] );
@@ -1970,7 +1970,7 @@ var plugin = __jQuery.ui.plugin = {
 
 
 
-var safeActiveElement = __jQuery.ui.safeActiveElement = function( document ) {
+var safeActiveElement = jBPM.ui.safeActiveElement = function( document ) {
 	var activeElement;
 
 	// Support: IE 9 only
@@ -2000,12 +2000,12 @@ var safeActiveElement = __jQuery.ui.safeActiveElement = function( document ) {
 
 
 
-var safeBlur = __jQuery.ui.safeBlur = function( element ) {
+var safeBlur = jBPM.ui.safeBlur = function( element ) {
 
 	// Support: IE9 - 10 only
 	// If the <body> is blurred, IE will switch windows, see #9420
 	if ( element && element.nodeName.toLowerCase() !== "body" ) {
-		__jQuery( element ).trigger( "blur" );
+		jBPM( element ).trigger( "blur" );
 	}
 };
 
@@ -2028,7 +2028,7 @@ var safeBlur = __jQuery.ui.safeBlur = function( element ) {
 
 
 
-__jQuery.widget( "ui.draggable", __jQuery.ui.mouse, {
+jBPM.widget( "ui.draggable", jBPM.ui.mouse, {
 	version: "1.12.1",
 	widgetEventPrefix: "drag",
 	options: {
@@ -2097,7 +2097,7 @@ __jQuery.widget( "ui.draggable", __jQuery.ui.mouse, {
 
 		// Among others, prevent a drag on a resizable-handle
 		if ( this.helper || o.disabled ||
-				__jQuery( event.target ).closest( ".ui-resizable-handle" ).length > 0 ) {
+				jBPM( event.target ).closest( ".ui-resizable-handle" ).length > 0 ) {
 			return false;
 		}
 
@@ -2117,9 +2117,9 @@ __jQuery.widget( "ui.draggable", __jQuery.ui.mouse, {
 
 	_blockFrames: function( selector ) {
 		this.iframeBlocks = this.document.find( selector ).map( function() {
-			var iframe = __jQuery( this );
+			var iframe = jBPM( this );
 
-			return __jQuery( "<div>" )
+			return jBPM( "<div>" )
 				.css( "position", "absolute" )
 				.appendTo( iframe.parent() )
 				.outerWidth( iframe.outerWidth() )
@@ -2136,8 +2136,8 @@ __jQuery.widget( "ui.draggable", __jQuery.ui.mouse, {
 	},
 
 	_blurActiveElement: function( event ) {
-		var activeElement = __jQuery.ui.safeActiveElement( this.document[ 0 ] ),
-			target = __jQuery( event.target );
+		var activeElement = jBPM.ui.safeActiveElement( this.document[ 0 ] ),
+			target = jBPM( event.target );
 
 		// Don't blur if the event occurred on an element that is within
 		// the currently focused element
@@ -2147,7 +2147,7 @@ __jQuery.widget( "ui.draggable", __jQuery.ui.mouse, {
 		}
 
 		// Blur any element that currently has focus, see #4261
-		__jQuery.ui.safeBlur( activeElement );
+		jBPM.ui.safeBlur( activeElement );
 	},
 
 	_mouseStart: function( event ) {
@@ -2163,8 +2163,8 @@ __jQuery.widget( "ui.draggable", __jQuery.ui.mouse, {
 		this._cacheHelperProportions();
 
 		//If ddmanager is used for droppables, set the global draggable
-		if ( __jQuery.ui.ddmanager ) {
-			__jQuery.ui.ddmanager.current = this;
+		if ( jBPM.ui.ddmanager ) {
+			jBPM.ui.ddmanager.current = this;
 		}
 
 		/*
@@ -2180,7 +2180,7 @@ __jQuery.widget( "ui.draggable", __jQuery.ui.mouse, {
 		this.scrollParent = this.helper.scrollParent( true );
 		this.offsetParent = this.helper.offsetParent();
 		this.hasFixedAncestor = this.helper.parents().filter( function() {
-				return __jQuery( this ).css( "position" ) === "fixed";
+				return jBPM( this ).css( "position" ) === "fixed";
 			} ).length > 0;
 
 		//The element's absolute position on the page minus margins
@@ -2208,8 +2208,8 @@ __jQuery.widget( "ui.draggable", __jQuery.ui.mouse, {
 		this._cacheHelperProportions();
 
 		//Prepare the droppable offsets
-		if ( __jQuery.ui.ddmanager && !o.dropBehaviour ) {
-			__jQuery.ui.ddmanager.prepareOffsets( this, event );
+		if ( jBPM.ui.ddmanager && !o.dropBehaviour ) {
+			jBPM.ui.ddmanager.prepareOffsets( this, event );
 		}
 
 		// Execute the drag once - this causes the helper not to be visible before getting its
@@ -2218,8 +2218,8 @@ __jQuery.widget( "ui.draggable", __jQuery.ui.mouse, {
 
 		// If the ddmanager is used for droppables, inform the manager that dragging has started
 		// (see #5003)
-		if ( __jQuery.ui.ddmanager ) {
-			__jQuery.ui.ddmanager.dragStart( this, event );
+		if ( jBPM.ui.ddmanager ) {
+			jBPM.ui.ddmanager.dragStart( this, event );
 		}
 
 		return true;
@@ -2255,7 +2255,7 @@ __jQuery.widget( "ui.draggable", __jQuery.ui.mouse, {
 		if ( !noPropagation ) {
 			var ui = this._uiHash();
 			if ( this._trigger( "drag", event, ui ) === false ) {
-				this._mouseUp( new __jQuery.Event( "mouseup", event ) );
+				this._mouseUp( new jBPM.Event( "mouseup", event ) );
 				return false;
 			}
 			this.position = ui.position;
@@ -2264,8 +2264,8 @@ __jQuery.widget( "ui.draggable", __jQuery.ui.mouse, {
 		this.helper[ 0 ].style.left = this.position.left + "px";
 		this.helper[ 0 ].style.top = this.position.top + "px";
 
-		if ( __jQuery.ui.ddmanager ) {
-			__jQuery.ui.ddmanager.drag( this, event );
+		if ( jBPM.ui.ddmanager ) {
+			jBPM.ui.ddmanager.drag( this, event );
 		}
 
 		return false;
@@ -2276,8 +2276,8 @@ __jQuery.widget( "ui.draggable", __jQuery.ui.mouse, {
 		//If we are using droppables, inform the manager about the drop
 		var that = this,
 			dropped = false;
-		if ( __jQuery.ui.ddmanager && !this.options.dropBehaviour ) {
-			dropped = __jQuery.ui.ddmanager.drop( this, event );
+		if ( jBPM.ui.ddmanager && !this.options.dropBehaviour ) {
+			dropped = jBPM.ui.ddmanager.drop( this, event );
 		}
 
 		//if a drop comes from outside (a sortable)
@@ -2288,10 +2288,10 @@ __jQuery.widget( "ui.draggable", __jQuery.ui.mouse, {
 
 		if ( ( this.options.revert === "invalid" && !dropped ) ||
 				( this.options.revert === "valid" && dropped ) ||
-				this.options.revert === true || ( __jQuery.isFunction( this.options.revert ) &&
+				this.options.revert === true || ( jBPM.isFunction( this.options.revert ) &&
 				this.options.revert.call( this.element, dropped ) )
 		) {
-			__jQuery( this.helper ).animate(
+			jBPM( this.helper ).animate(
 				this.originalPosition,
 				parseInt( this.options.revertDuration, 10 ),
 				function() {
@@ -2314,8 +2314,8 @@ __jQuery.widget( "ui.draggable", __jQuery.ui.mouse, {
 
 		// If the ddmanager is used for droppables, inform the manager that dragging has stopped
 		// (see #5003)
-		if ( __jQuery.ui.ddmanager ) {
-			__jQuery.ui.ddmanager.dragStop( this, event );
+		if ( jBPM.ui.ddmanager ) {
+			jBPM.ui.ddmanager.dragStop( this, event );
 		}
 
 		// Only need to focus if the event occurred on the draggable itself, see #10527
@@ -2326,13 +2326,13 @@ __jQuery.widget( "ui.draggable", __jQuery.ui.mouse, {
 			this.element.trigger( "focus" );
 		}
 
-		return __jQuery.ui.mouse.prototype._mouseUp.call( this, event );
+		return jBPM.ui.mouse.prototype._mouseUp.call( this, event );
 	},
 
 	cancel: function() {
 
 		if ( this.helper.is( ".ui-draggable-dragging" ) ) {
-			this._mouseUp( new __jQuery.Event( "mouseup", { target: this.element[ 0 ] } ) );
+			this._mouseUp( new jBPM.Event( "mouseup", { target: this.element[ 0 ] } ) );
 		} else {
 			this._clear();
 		}
@@ -2343,7 +2343,7 @@ __jQuery.widget( "ui.draggable", __jQuery.ui.mouse, {
 
 	_getHandle: function( event ) {
 		return this.options.handle ?
-			!!__jQuery( event.target ).closest( this.element.find( this.options.handle ) ).length :
+			!!jBPM( event.target ).closest( this.element.find( this.options.handle ) ).length :
 			true;
 	},
 
@@ -2360,9 +2360,9 @@ __jQuery.widget( "ui.draggable", __jQuery.ui.mouse, {
 	_createHelper: function( event ) {
 
 		var o = this.options,
-			helperIsFunction = __jQuery.isFunction( o.helper ),
+			helperIsFunction = jBPM.isFunction( o.helper ),
 			helper = helperIsFunction ?
-				__jQuery( o.helper.apply( this.element[ 0 ], [ event ] ) ) :
+				jBPM( o.helper.apply( this.element[ 0 ], [ event ] ) ) :
 				( o.helper === "clone" ?
 					this.element.clone().removeAttr( "id" ) :
 					this.element );
@@ -2399,7 +2399,7 @@ __jQuery.widget( "ui.draggable", __jQuery.ui.mouse, {
 		if ( typeof obj === "string" ) {
 			obj = obj.split( " " );
 		}
-		if ( __jQuery.isArray( obj ) ) {
+		if ( jBPM.isArray( obj ) ) {
 			obj = { left: +obj[ 0 ], top: +obj[ 1 ] || 0 };
 		}
 		if ( "left" in obj ) {
@@ -2434,7 +2434,7 @@ __jQuery.widget( "ui.draggable", __jQuery.ui.mouse, {
 		// the document, which means that the scroll is included in the initial calculation of the
 		// offset of the parent, and never recalculated upon drag
 		if ( this.cssPosition === "absolute" && this.scrollParent[ 0 ] !== document &&
-				__jQuery.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) {
+				jBPM.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) {
 			po.left += this.scrollParent.scrollLeft();
 			po.top += this.scrollParent.scrollTop();
 		}
@@ -2498,12 +2498,12 @@ __jQuery.widget( "ui.draggable", __jQuery.ui.mouse, {
 
 		if ( o.containment === "window" ) {
 			this.containment = [
-				__jQuery( window ).scrollLeft() - this.offset.relative.left - this.offset.parent.left,
-				__jQuery( window ).scrollTop() - this.offset.relative.top - this.offset.parent.top,
-				__jQuery( window ).scrollLeft() + __jQuery( window ).width() -
+				jBPM( window ).scrollLeft() - this.offset.relative.left - this.offset.parent.left,
+				jBPM( window ).scrollTop() - this.offset.relative.top - this.offset.parent.top,
+				jBPM( window ).scrollLeft() + jBPM( window ).width() -
 					this.helperProportions.width - this.margins.left,
-				__jQuery( window ).scrollTop() +
-					( __jQuery( window ).height() || document.body.parentNode.scrollHeight ) -
+				jBPM( window ).scrollTop() +
+					( jBPM( window ).height() || document.body.parentNode.scrollHeight ) -
 					this.helperProportions.height - this.margins.top
 			];
 			return;
@@ -2513,8 +2513,8 @@ __jQuery.widget( "ui.draggable", __jQuery.ui.mouse, {
 			this.containment = [
 				0,
 				0,
-				__jQuery( document ).width() - this.helperProportions.width - this.margins.left,
-				( __jQuery( document ).height() || document.body.parentNode.scrollHeight ) -
+				jBPM( document ).width() - this.helperProportions.width - this.margins.left,
+				( jBPM( document ).height() || document.body.parentNode.scrollHeight ) -
 					this.helperProportions.height - this.margins.top
 			];
 			return;
@@ -2529,7 +2529,7 @@ __jQuery.widget( "ui.draggable", __jQuery.ui.mouse, {
 			o.containment = this.helper[ 0 ].parentNode;
 		}
 
-		c = __jQuery( o.containment );
+		c = jBPM( o.containment );
 		ce = c[ 0 ];
 
 		if ( !ce ) {
@@ -2737,14 +2737,14 @@ __jQuery.widget( "ui.draggable", __jQuery.ui.mouse, {
 
 	_trigger: function( type, event, ui ) {
 		ui = ui || this._uiHash();
-		__jQuery.ui.plugin.call( this, type, [ event, ui, this ], true );
+		jBPM.ui.plugin.call( this, type, [ event, ui, this ], true );
 
 		// Absolute position and offset (see #6884 ) have to be recalculated after plugins
 		if ( /^(drag|start|stop)/.test( type ) ) {
 			this.positionAbs = this._convertPositionTo( "absolute" );
 			ui.offset = this.positionAbs;
 		}
-		return __jQuery.Widget.prototype._trigger.call( this, type, event, ui );
+		return jBPM.Widget.prototype._trigger.call( this, type, event, ui );
 	},
 
 	plugins: {},
@@ -2760,15 +2760,15 @@ __jQuery.widget( "ui.draggable", __jQuery.ui.mouse, {
 
 } );
 
-__jQuery.ui.plugin.add( "draggable", "connectToSortable", {
+jBPM.ui.plugin.add( "draggable", "connectToSortable", {
 	start: function( event, ui, draggable ) {
-		var uiSortable = __jQuery.extend( {}, ui, {
+		var uiSortable = jBPM.extend( {}, ui, {
 			item: draggable.element
 		} );
 
 		draggable.sortables = [];
-		__jQuery( draggable.options.connectToSortable ).each( function() {
-			var sortable = __jQuery( this ).sortable( "instance" );
+		jBPM( draggable.options.connectToSortable ).each( function() {
+			var sortable = jBPM( this ).sortable( "instance" );
 
 			if ( sortable && !sortable.options.disabled ) {
 				draggable.sortables.push( sortable );
@@ -2782,13 +2782,13 @@ __jQuery.ui.plugin.add( "draggable", "connectToSortable", {
 		} );
 	},
 	stop: function( event, ui, draggable ) {
-		var uiSortable = __jQuery.extend( {}, ui, {
+		var uiSortable = jBPM.extend( {}, ui, {
 			item: draggable.element
 		} );
 
 		draggable.cancelHelperRemoval = false;
 
-		__jQuery.each( draggable.sortables, function() {
+		jBPM.each( draggable.sortables, function() {
 			var sortable = this;
 
 			if ( sortable.isOver ) {
@@ -2824,7 +2824,7 @@ __jQuery.ui.plugin.add( "draggable", "connectToSortable", {
 		} );
 	},
 	drag: function( event, ui, draggable ) {
-		__jQuery.each( draggable.sortables, function() {
+		jBPM.each( draggable.sortables, function() {
 			var innermostIntersecting = false,
 				sortable = this;
 
@@ -2836,7 +2836,7 @@ __jQuery.ui.plugin.add( "draggable", "connectToSortable", {
 			if ( sortable._intersectsWith( sortable.containerCache ) ) {
 				innermostIntersecting = true;
 
-				__jQuery.each( draggable.sortables, function() {
+				jBPM.each( draggable.sortables, function() {
 
 					// Copy over variables that sortable's _intersectsWith uses
 					this.positionAbs = draggable.positionAbs;
@@ -2845,7 +2845,7 @@ __jQuery.ui.plugin.add( "draggable", "connectToSortable", {
 
 					if ( this !== sortable &&
 							this._intersectsWith( this.containerCache ) &&
-							__jQuery.contains( sortable.element[ 0 ], this.element[ 0 ] ) ) {
+							jBPM.contains( sortable.element[ 0 ], this.element[ 0 ] ) ) {
 						innermostIntersecting = false;
 					}
 
@@ -2897,7 +2897,7 @@ __jQuery.ui.plugin.add( "draggable", "connectToSortable", {
 
 					// Need to refreshPositions of all sortables in the case that
 					// adding to one sortable changes the location of the other sortables (#9675)
-					__jQuery.each( draggable.sortables, function() {
+					jBPM.each( draggable.sortables, function() {
 						this.refreshPositions();
 					} );
 
@@ -2954,7 +2954,7 @@ __jQuery.ui.plugin.add( "draggable", "connectToSortable", {
 
 					// Need to refreshPositions of all sortables just in case removing
 					// from one sortable changes the location of other sortables (#9675)
-					__jQuery.each( draggable.sortables, function() {
+					jBPM.each( draggable.sortables, function() {
 						this.refreshPositions();
 					} );
 				}
@@ -2963,9 +2963,9 @@ __jQuery.ui.plugin.add( "draggable", "connectToSortable", {
 	}
 } );
 
-__jQuery.ui.plugin.add( "draggable", "cursor", {
+jBPM.ui.plugin.add( "draggable", "cursor", {
 	start: function( event, ui, instance ) {
-		var t = __jQuery( "body" ),
+		var t = jBPM( "body" ),
 			o = instance.options;
 
 		if ( t.css( "cursor" ) ) {
@@ -2976,14 +2976,14 @@ __jQuery.ui.plugin.add( "draggable", "cursor", {
 	stop: function( event, ui, instance ) {
 		var o = instance.options;
 		if ( o._cursor ) {
-			__jQuery( "body" ).css( "cursor", o._cursor );
+			jBPM( "body" ).css( "cursor", o._cursor );
 		}
 	}
 } );
 
-__jQuery.ui.plugin.add( "draggable", "opacity", {
+jBPM.ui.plugin.add( "draggable", "opacity", {
 	start: function( event, ui, instance ) {
-		var t = __jQuery( ui.helper ),
+		var t = jBPM( ui.helper ),
 			o = instance.options;
 		if ( t.css( "opacity" ) ) {
 			o._opacity = t.css( "opacity" );
@@ -2993,12 +2993,12 @@ __jQuery.ui.plugin.add( "draggable", "opacity", {
 	stop: function( event, ui, instance ) {
 		var o = instance.options;
 		if ( o._opacity ) {
-			__jQuery( ui.helper ).css( "opacity", o._opacity );
+			jBPM( ui.helper ).css( "opacity", o._opacity );
 		}
 	}
 } );
 
-__jQuery.ui.plugin.add( "draggable", "scroll", {
+jBPM.ui.plugin.add( "draggable", "scroll", {
 	start: function( event, ui, i ) {
 		if ( !i.scrollParentNotHidden ) {
 			i.scrollParentNotHidden = i.helper.scrollParent( false );
@@ -3038,46 +3038,46 @@ __jQuery.ui.plugin.add( "draggable", "scroll", {
 		} else {
 
 			if ( !o.axis || o.axis !== "x" ) {
-				if ( event.pageY - __jQuery( document ).scrollTop() < o.scrollSensitivity ) {
-					scrolled = __jQuery( document ).scrollTop( __jQuery( document ).scrollTop() - o.scrollSpeed );
-				} else if ( __jQuery( window ).height() - ( event.pageY - __jQuery( document ).scrollTop() ) <
+				if ( event.pageY - jBPM( document ).scrollTop() < o.scrollSensitivity ) {
+					scrolled = jBPM( document ).scrollTop( jBPM( document ).scrollTop() - o.scrollSpeed );
+				} else if ( jBPM( window ).height() - ( event.pageY - jBPM( document ).scrollTop() ) <
 						o.scrollSensitivity ) {
-					scrolled = __jQuery( document ).scrollTop( __jQuery( document ).scrollTop() + o.scrollSpeed );
+					scrolled = jBPM( document ).scrollTop( jBPM( document ).scrollTop() + o.scrollSpeed );
 				}
 			}
 
 			if ( !o.axis || o.axis !== "y" ) {
-				if ( event.pageX - __jQuery( document ).scrollLeft() < o.scrollSensitivity ) {
-					scrolled = __jQuery( document ).scrollLeft(
-						__jQuery( document ).scrollLeft() - o.scrollSpeed
+				if ( event.pageX - jBPM( document ).scrollLeft() < o.scrollSensitivity ) {
+					scrolled = jBPM( document ).scrollLeft(
+						jBPM( document ).scrollLeft() - o.scrollSpeed
 					);
-				} else if ( __jQuery( window ).width() - ( event.pageX - __jQuery( document ).scrollLeft() ) <
+				} else if ( jBPM( window ).width() - ( event.pageX - jBPM( document ).scrollLeft() ) <
 						o.scrollSensitivity ) {
-					scrolled = __jQuery( document ).scrollLeft(
-						__jQuery( document ).scrollLeft() + o.scrollSpeed
+					scrolled = jBPM( document ).scrollLeft(
+						jBPM( document ).scrollLeft() + o.scrollSpeed
 					);
 				}
 			}
 
 		}
 
-		if ( scrolled !== false && __jQuery.ui.ddmanager && !o.dropBehaviour ) {
-			__jQuery.ui.ddmanager.prepareOffsets( i, event );
+		if ( scrolled !== false && jBPM.ui.ddmanager && !o.dropBehaviour ) {
+			jBPM.ui.ddmanager.prepareOffsets( i, event );
 		}
 
 	}
 } );
 
-__jQuery.ui.plugin.add( "draggable", "snap", {
+jBPM.ui.plugin.add( "draggable", "snap", {
 	start: function( event, ui, i ) {
 
 		var o = i.options;
 
 		i.snapElements = [];
 
-		__jQuery( o.snap.constructor !== String ? ( o.snap.items || ":data(ui-draggable)" ) : o.snap )
+		jBPM( o.snap.constructor !== String ? ( o.snap.items || ":data(ui-draggable)" ) : o.snap )
 			.each( function() {
-				var $t = __jQuery( this ),
+				var $t = jBPM( this ),
 					$o = $t.offset();
 				if ( this !== i.element[ 0 ] ) {
 					i.snapElements.push( {
@@ -3105,14 +3105,14 @@ __jQuery.ui.plugin.add( "draggable", "snap", {
 			b = t + inst.snapElements[ i ].height;
 
 			if ( x2 < l - d || x1 > r + d || y2 < t - d || y1 > b + d ||
-					!__jQuery.contains( inst.snapElements[ i ].item.ownerDocument,
+					!jBPM.contains( inst.snapElements[ i ].item.ownerDocument,
 					inst.snapElements[ i ].item ) ) {
 				if ( inst.snapElements[ i ].snapping ) {
 					( inst.options.snap.release &&
 						inst.options.snap.release.call(
 							inst.element,
 							event,
-							__jQuery.extend( inst._uiHash(), { snapItem: inst.snapElements[ i ].item } )
+							jBPM.extend( inst._uiHash(), { snapItem: inst.snapElements[ i ].item } )
 						) );
 				}
 				inst.snapElements[ i ].snapping = false;
@@ -3188,7 +3188,7 @@ __jQuery.ui.plugin.add( "draggable", "snap", {
 					inst.options.snap.snap.call(
 						inst.element,
 						event,
-						__jQuery.extend( inst._uiHash(), {
+						jBPM.extend( inst._uiHash(), {
 							snapItem: inst.snapElements[ i ].item
 						} ) ) );
 			}
@@ -3199,28 +3199,28 @@ __jQuery.ui.plugin.add( "draggable", "snap", {
 	}
 } );
 
-__jQuery.ui.plugin.add( "draggable", "stack", {
+jBPM.ui.plugin.add( "draggable", "stack", {
 	start: function( event, ui, instance ) {
 		var min,
 			o = instance.options,
-			group = __jQuery.makeArray( __jQuery( o.stack ) ).sort( function( a, b ) {
-				return ( parseInt( __jQuery( a ).css( "zIndex" ), 10 ) || 0 ) -
-					( parseInt( __jQuery( b ).css( "zIndex" ), 10 ) || 0 );
+			group = jBPM.makeArray( jBPM( o.stack ) ).sort( function( a, b ) {
+				return ( parseInt( jBPM( a ).css( "zIndex" ), 10 ) || 0 ) -
+					( parseInt( jBPM( b ).css( "zIndex" ), 10 ) || 0 );
 			} );
 
 		if ( !group.length ) { return; }
 
-		min = parseInt( __jQuery( group[ 0 ] ).css( "zIndex" ), 10 ) || 0;
-		__jQuery( group ).each( function( i ) {
-			__jQuery( this ).css( "zIndex", min + i );
+		min = parseInt( jBPM( group[ 0 ] ).css( "zIndex" ), 10 ) || 0;
+		jBPM( group ).each( function( i ) {
+			jBPM( this ).css( "zIndex", min + i );
 		} );
 		this.css( "zIndex", ( min + group.length ) );
 	}
 } );
 
-__jQuery.ui.plugin.add( "draggable", "zIndex", {
+jBPM.ui.plugin.add( "draggable", "zIndex", {
 	start: function( event, ui, instance ) {
-		var t = __jQuery( ui.helper ),
+		var t = jBPM( ui.helper ),
 			o = instance.options;
 
 		if ( t.css( "zIndex" ) ) {
@@ -3232,12 +3232,12 @@ __jQuery.ui.plugin.add( "draggable", "zIndex", {
 		var o = instance.options;
 
 		if ( o._zIndex ) {
-			__jQuery( ui.helper ).css( "zIndex", o._zIndex );
+			jBPM( ui.helper ).css( "zIndex", o._zIndex );
 		}
 	}
 } );
 
-var widgetsDraggable = __jQuery.ui.draggable;
+var widgetsDraggable = jBPM.ui.draggable;
 
 
 /*!
@@ -3257,7 +3257,7 @@ var widgetsDraggable = __jQuery.ui.draggable;
 
 
 
-__jQuery.widget( "ui.droppable", {
+jBPM.widget( "ui.droppable", {
 	version: "1.12.1",
 	widgetEventPrefix: "drop",
 	options: {
@@ -3283,7 +3283,7 @@ __jQuery.widget( "ui.droppable", {
 		this.isover = false;
 		this.isout = true;
 
-		this.accept = __jQuery.isFunction( accept ) ? accept : function( d ) {
+		this.accept = jBPM.isFunction( accept ) ? accept : function( d ) {
 			return d.is( accept );
 		};
 
@@ -3313,8 +3313,8 @@ __jQuery.widget( "ui.droppable", {
 	_addToManager: function( scope ) {
 
 		// Add the reference and positions to the manager
-		__jQuery.ui.ddmanager.droppables[ scope ] = __jQuery.ui.ddmanager.droppables[ scope ] || [];
-		__jQuery.ui.ddmanager.droppables[ scope ].push( this );
+		jBPM.ui.ddmanager.droppables[ scope ] = jBPM.ui.ddmanager.droppables[ scope ] || [];
+		jBPM.ui.ddmanager.droppables[ scope ].push( this );
 	},
 
 	_splice: function( drop ) {
@@ -3327,7 +3327,7 @@ __jQuery.widget( "ui.droppable", {
 	},
 
 	_destroy: function() {
-		var drop = __jQuery.ui.ddmanager.droppables[ this.options.scope ];
+		var drop = jBPM.ui.ddmanager.droppables[ this.options.scope ];
 
 		this._splice( drop );
 	},
@@ -3335,11 +3335,11 @@ __jQuery.widget( "ui.droppable", {
 	_setOption: function( key, value ) {
 
 		if ( key === "accept" ) {
-			this.accept = __jQuery.isFunction( value ) ? value : function( d ) {
+			this.accept = jBPM.isFunction( value ) ? value : function( d ) {
 				return d.is( value );
 			};
 		} else if ( key === "scope" ) {
-			var drop = __jQuery.ui.ddmanager.droppables[ this.options.scope ];
+			var drop = jBPM.ui.ddmanager.droppables[ this.options.scope ];
 
 			this._splice( drop );
 			this._addToManager( value );
@@ -3349,7 +3349,7 @@ __jQuery.widget( "ui.droppable", {
 	},
 
 	_activate: function( event ) {
-		var draggable = __jQuery.ui.ddmanager.current;
+		var draggable = jBPM.ui.ddmanager.current;
 
 		this._addActiveClass();
 		if ( draggable ) {
@@ -3358,7 +3358,7 @@ __jQuery.widget( "ui.droppable", {
 	},
 
 	_deactivate: function( event ) {
-		var draggable = __jQuery.ui.ddmanager.current;
+		var draggable = jBPM.ui.ddmanager.current;
 
 		this._removeActiveClass();
 		if ( draggable ) {
@@ -3368,7 +3368,7 @@ __jQuery.widget( "ui.droppable", {
 
 	_over: function( event ) {
 
-		var draggable = __jQuery.ui.ddmanager.current;
+		var draggable = jBPM.ui.ddmanager.current;
 
 		// Bail if draggable and droppable are same element
 		if ( !draggable || ( draggable.currentItem ||
@@ -3386,7 +3386,7 @@ __jQuery.widget( "ui.droppable", {
 
 	_out: function( event ) {
 
-		var draggable = __jQuery.ui.ddmanager.current;
+		var draggable = jBPM.ui.ddmanager.current;
 
 		// Bail if draggable and droppable are same element
 		if ( !draggable || ( draggable.currentItem ||
@@ -3404,7 +3404,7 @@ __jQuery.widget( "ui.droppable", {
 
 	_drop: function( event, custom ) {
 
-		var draggable = custom || __jQuery.ui.ddmanager.current,
+		var draggable = custom || jBPM.ui.ddmanager.current,
 			childrenIntersection = false;
 
 		// Bail if draggable and droppable are same element
@@ -3417,7 +3417,7 @@ __jQuery.widget( "ui.droppable", {
 			.find( ":data(ui-droppable)" )
 			.not( ".ui-draggable-dragging" )
 			.each( function() {
-				var inst = __jQuery( this ).droppable( "instance" );
+				var inst = jBPM( this ).droppable( "instance" );
 				if (
 					inst.options.greedy &&
 					!inst.options.disabled &&
@@ -3427,7 +3427,7 @@ __jQuery.widget( "ui.droppable", {
 					) &&
 					intersect(
 						draggable,
-						__jQuery.extend( inst, { offset: inst.element.offset() } ),
+						jBPM.extend( inst, { offset: inst.element.offset() } ),
 						inst.options.tolerance, event
 					)
 				) {
@@ -3479,7 +3479,7 @@ __jQuery.widget( "ui.droppable", {
 	}
 } );
 
-var intersect = __jQuery.ui.intersect = ( function() {
+var intersect = jBPM.ui.intersect = ( function() {
 	function isOverAxis( x, reference, size ) {
 		return ( x >= reference ) && ( x < ( reference + size ) );
 	}
@@ -3531,13 +3531,13 @@ var intersect = __jQuery.ui.intersect = ( function() {
 /*
 	This manager tracks offsets of draggables and droppables
 */
-__jQuery.ui.ddmanager = {
+jBPM.ui.ddmanager = {
 	current: null,
 	droppables: { "default": [] },
 	prepareOffsets: function( t, event ) {
 
 		var i, j,
-			m = __jQuery.ui.ddmanager.droppables[ t.options.scope ] || [],
+			m = jBPM.ui.ddmanager.droppables[ t.options.scope ] || [],
 			type = event ? event.type : null, // workaround for #2317
 			list = ( t.currentItem || t.element ).find( ":data(ui-droppable)" ).addBack();
 
@@ -3581,7 +3581,7 @@ __jQuery.ui.ddmanager = {
 		var dropped = false;
 
 		// Create a copy of the droppables in case the list changes during the drop (#9116)
-		__jQuery.each( ( __jQuery.ui.ddmanager.droppables[ draggable.options.scope ] || [] ).slice(), function() {
+		jBPM.each( ( jBPM.ui.ddmanager.droppables[ draggable.options.scope ] || [] ).slice(), function() {
 
 			if ( !this.options ) {
 				return;
@@ -3608,7 +3608,7 @@ __jQuery.ui.ddmanager = {
 		// droppables can be recalculated (see #5003)
 		draggable.element.parentsUntil( "body" ).on( "scroll.droppable", function() {
 			if ( !draggable.options.refreshPositions ) {
-				__jQuery.ui.ddmanager.prepareOffsets( draggable, event );
+				jBPM.ui.ddmanager.prepareOffsets( draggable, event );
 			}
 		} );
 	},
@@ -3617,11 +3617,11 @@ __jQuery.ui.ddmanager = {
 		// If you have a highly dynamic page, you might try this option. It renders positions
 		// every time you move the mouse.
 		if ( draggable.options.refreshPositions ) {
-			__jQuery.ui.ddmanager.prepareOffsets( draggable, event );
+			jBPM.ui.ddmanager.prepareOffsets( draggable, event );
 		}
 
 		// Run through all droppables and check their positions based on specific tolerance options
-		__jQuery.each( __jQuery.ui.ddmanager.droppables[ draggable.options.scope ] || [], function() {
+		jBPM.each( jBPM.ui.ddmanager.droppables[ draggable.options.scope ] || [], function() {
 
 			if ( this.options.disabled || this.greedyChild || !this.visible ) {
 				return;
@@ -3641,11 +3641,11 @@ __jQuery.ui.ddmanager = {
 				// find droppable parents with same scope
 				scope = this.options.scope;
 				parent = this.element.parents( ":data(ui-droppable)" ).filter( function() {
-					return __jQuery( this ).droppable( "instance" ).options.scope === scope;
+					return jBPM( this ).droppable( "instance" ).options.scope === scope;
 				} );
 
 				if ( parent.length ) {
-					parentInstance = __jQuery( parent[ 0 ] ).droppable( "instance" );
+					parentInstance = jBPM( parent[ 0 ] ).droppable( "instance" );
 					parentInstance.greedyChild = ( c === "isover" );
 				}
 			}
@@ -3676,17 +3676,17 @@ __jQuery.ui.ddmanager = {
 		// Call prepareOffsets one final time since IE does not fire return scroll events when
 		// overflow was caused by drag (see #5003)
 		if ( !draggable.options.refreshPositions ) {
-			__jQuery.ui.ddmanager.prepareOffsets( draggable, event );
+			jBPM.ui.ddmanager.prepareOffsets( draggable, event );
 		}
 	}
 };
 
 // DEPRECATED
 // TODO: switch return back to widget declaration at top of file when this is removed
-if ( __jQuery.uiBackCompat !== false ) {
+if ( jBPM.uiBackCompat !== false ) {
 
 	// Backcompat for activeClass and hoverClass options
-	__jQuery.widget( "ui.droppable", __jQuery.ui.droppable, {
+	jBPM.widget( "ui.droppable", jBPM.ui.droppable, {
 		options: {
 			hoverClass: false,
 			activeClass: false
@@ -3718,7 +3718,7 @@ if ( __jQuery.uiBackCompat !== false ) {
 	} );
 }
 
-var widgetsDroppable = __jQuery.ui.droppable;
+var widgetsDroppable = jBPM.ui.droppable;
 
 
 /*!
@@ -3741,7 +3741,7 @@ var widgetsDroppable = __jQuery.ui.droppable;
 
 
 
-__jQuery.widget( "ui.resizable", __jQuery.ui.mouse, {
+jBPM.widget( "ui.resizable", jBPM.ui.mouse, {
 	version: "1.12.1",
 	widgetEventPrefix: "resize",
 	options: {
@@ -3783,7 +3783,7 @@ __jQuery.widget( "ui.resizable", __jQuery.ui.mouse, {
 
 	_hasScroll: function( el, a ) {
 
-		if ( __jQuery( el ).css( "overflow" ) === "hidden" ) {
+		if ( jBPM( el ).css( "overflow" ) === "hidden" ) {
 			return false;
 		}
 
@@ -3810,7 +3810,7 @@ __jQuery.widget( "ui.resizable", __jQuery.ui.mouse, {
 			that = this;
 		this._addClass( "ui-resizable" );
 
-		__jQuery.extend( this, {
+		jBPM.extend( this, {
 			_aspectRatio: !!( o.aspectRatio ),
 			aspectRatio: o.aspectRatio,
 			originalElement: this.element,
@@ -3822,7 +3822,7 @@ __jQuery.widget( "ui.resizable", __jQuery.ui.mouse, {
 		if ( this.element[ 0 ].nodeName.match( /^(canvas|textarea|input|select|button|img)$/i ) ) {
 
 			this.element.wrap(
-				__jQuery( "<div class='ui-wrapper' style='overflow: hidden;'></div>" ).css( {
+				jBPM( "<div class='ui-wrapper' style='overflow: hidden;'></div>" ).css( {
 					position: this.element.css( "position" ),
 					width: this.element.outerWidth(),
 					height: this.element.outerHeight(),
@@ -3868,7 +3868,7 @@ __jQuery.widget( "ui.resizable", __jQuery.ui.mouse, {
 		this._setupHandles();
 
 		if ( o.autoHide ) {
-			__jQuery( this.element )
+			jBPM( this.element )
 				.on( "mouseenter", function() {
 					if ( o.disabled ) {
 						return;
@@ -3896,7 +3896,7 @@ __jQuery.widget( "ui.resizable", __jQuery.ui.mouse, {
 
 		var wrapper,
 			_destroy = function( exp ) {
-				__jQuery( exp )
+				jBPM( exp )
 					.removeData( "resizable" )
 					.removeData( "ui-resizable" )
 					.off( ".resizable" )
@@ -3940,7 +3940,7 @@ __jQuery.widget( "ui.resizable", __jQuery.ui.mouse, {
 	_setupHandles: function() {
 		var o = this.options, handle, i, n, hname, axis, that = this;
 		this.handles = o.handles ||
-			( !__jQuery( ".ui-resizable-handle", this.element ).length ?
+			( !jBPM( ".ui-resizable-handle", this.element ).length ?
 				"e,s,se" : {
 					n: ".ui-resizable-n",
 					e: ".ui-resizable-e",
@@ -3952,7 +3952,7 @@ __jQuery.widget( "ui.resizable", __jQuery.ui.mouse, {
 					nw: ".ui-resizable-nw"
 				} );
 
-		this._handles = __jQuery();
+		this._handles = jBPM();
 		if ( this.handles.constructor === String ) {
 
 			if ( this.handles === "all" ) {
@@ -3964,9 +3964,9 @@ __jQuery.widget( "ui.resizable", __jQuery.ui.mouse, {
 
 			for ( i = 0; i < n.length; i++ ) {
 
-				handle = __jQuery.trim( n[ i ] );
+				handle = jBPM.trim( n[ i ] );
 				hname = "ui-resizable-" + handle;
-				axis = __jQuery( "<div>" );
+				axis = jBPM( "<div>" );
 				this._addClass( axis, "ui-resizable-handle " + hname );
 
 				axis.css( { zIndex: o.zIndex } );
@@ -3988,7 +3988,7 @@ __jQuery.widget( "ui.resizable", __jQuery.ui.mouse, {
 				if ( this.handles[ i ].constructor === String ) {
 					this.handles[ i ] = this.element.children( this.handles[ i ] ).first().show();
 				} else if ( this.handles[ i ].jquery || this.handles[ i ].nodeType ) {
-					this.handles[ i ] = __jQuery( this.handles[ i ] );
+					this.handles[ i ] = jBPM( this.handles[ i ] );
 					this._on( this.handles[ i ], { "mousedown": that._mouseDown } );
 				}
 
@@ -3996,7 +3996,7 @@ __jQuery.widget( "ui.resizable", __jQuery.ui.mouse, {
 						this.originalElement[ 0 ]
 							.nodeName
 							.match( /^(textarea|input|select|button)$/i ) ) {
-					axis = __jQuery( this.handles[ i ], this.element );
+					axis = jBPM( this.handles[ i ], this.element );
 
 					padWrapper = /sw|ne|nw|se|n|s/.test( i ) ?
 						axis.outerHeight() :
@@ -4046,8 +4046,8 @@ __jQuery.widget( "ui.resizable", __jQuery.ui.mouse, {
 			capture = false;
 
 		for ( i in this.handles ) {
-			handle = __jQuery( this.handles[ i ] )[ 0 ];
-			if ( handle === event.target || __jQuery.contains( handle, event.target ) ) {
+			handle = jBPM( this.handles[ i ] )[ 0 ];
+			if ( handle === event.target || jBPM.contains( handle, event.target ) ) {
 				capture = true;
 			}
 		}
@@ -4069,8 +4069,8 @@ __jQuery.widget( "ui.resizable", __jQuery.ui.mouse, {
 		curtop = this._num( this.helper.css( "top" ) );
 
 		if ( o.containment ) {
-			curleft += __jQuery( o.containment ).scrollLeft() || 0;
-			curtop += __jQuery( o.containment ).scrollTop() || 0;
+			curleft += jBPM( o.containment ).scrollLeft() || 0;
+			curtop += jBPM( o.containment ).scrollTop() || 0;
 		}
 
 		this.offset = this.helper.offset();
@@ -4104,8 +4104,8 @@ __jQuery.widget( "ui.resizable", __jQuery.ui.mouse, {
 			o.aspectRatio :
 			( ( this.originalSize.width / this.originalSize.height ) || 1 );
 
-		cursor = __jQuery( ".ui-resizable-" + this.axis ).css( "cursor" );
-		__jQuery( "body" ).css( "cursor", cursor === "auto" ? this.axis + "-resize" : cursor );
+		cursor = jBPM( ".ui-resizable-" + this.axis ).css( "cursor" );
+		jBPM( "body" ).css( "cursor", cursor === "auto" ? this.axis + "-resize" : cursor );
 
 		this._addClass( "ui-resizable-resizing" );
 		this._propagate( "start", event );
@@ -4146,7 +4146,7 @@ __jQuery.widget( "ui.resizable", __jQuery.ui.mouse, {
 			this._proportionallyResize();
 		}
 
-		if ( !__jQuery.isEmptyObject( props ) ) {
+		if ( !jBPM.isEmptyObject( props ) ) {
 			this._updatePrevProperties();
 			this._trigger( "resize", event, this.ui() );
 			this._applyChanges();
@@ -4178,7 +4178,7 @@ __jQuery.widget( "ui.resizable", __jQuery.ui.mouse, {
 				( that.position.top - that.originalPosition.top ) ) || null;
 
 			if ( !o.animate ) {
-				this.element.css( __jQuery.extend( s, { top: top, left: left } ) );
+				this.element.css( jBPM.extend( s, { top: top, left: left } ) );
 			}
 
 			that.helper.height( that.size.height );
@@ -4189,7 +4189,7 @@ __jQuery.widget( "ui.resizable", __jQuery.ui.mouse, {
 			}
 		}
 
-		__jQuery( "body" ).css( "cursor", "auto" );
+		jBPM( "body" ).css( "cursor", "auto" );
 
 		this._removeClass( "ui-resizable-resizing" );
 
@@ -4418,7 +4418,7 @@ __jQuery.widget( "ui.resizable", __jQuery.ui.mouse, {
 
 		if ( this._helper ) {
 
-			this.helper = this.helper || __jQuery( "<div style='overflow:hidden;'></div>" );
+			this.helper = this.helper || jBPM( "<div style='overflow:hidden;'></div>" );
 
 			this._addClass( this.helper, this._helper );
 			this.helper.css( {
@@ -4456,25 +4456,25 @@ __jQuery.widget( "ui.resizable", __jQuery.ui.mouse, {
 			return { height: this.originalSize.height + dy };
 		},
 		se: function( event, dx, dy ) {
-			return __jQuery.extend( this._change.s.apply( this, arguments ),
+			return jBPM.extend( this._change.s.apply( this, arguments ),
 				this._change.e.apply( this, [ event, dx, dy ] ) );
 		},
 		sw: function( event, dx, dy ) {
-			return __jQuery.extend( this._change.s.apply( this, arguments ),
+			return jBPM.extend( this._change.s.apply( this, arguments ),
 				this._change.w.apply( this, [ event, dx, dy ] ) );
 		},
 		ne: function( event, dx, dy ) {
-			return __jQuery.extend( this._change.n.apply( this, arguments ),
+			return jBPM.extend( this._change.n.apply( this, arguments ),
 				this._change.e.apply( this, [ event, dx, dy ] ) );
 		},
 		nw: function( event, dx, dy ) {
-			return __jQuery.extend( this._change.n.apply( this, arguments ),
+			return jBPM.extend( this._change.n.apply( this, arguments ),
 				this._change.w.apply( this, [ event, dx, dy ] ) );
 		}
 	},
 
 	_propagate: function( n, event ) {
-		__jQuery.ui.plugin.call( this, n, [ event, this.ui() ] );
+		jBPM.ui.plugin.call( this, n, [ event, this.ui() ] );
 		( n !== "resize" && this._trigger( n, event, this.ui() ) );
 	},
 
@@ -4498,10 +4498,10 @@ __jQuery.widget( "ui.resizable", __jQuery.ui.mouse, {
  * Resizable Extensions
  */
 
-__jQuery.ui.plugin.add( "resizable", "animate", {
+jBPM.ui.plugin.add( "resizable", "animate", {
 
 	stop: function( event ) {
-		var that = __jQuery( this ).resizable( "instance" ),
+		var that = jBPM( this ).resizable( "instance" ),
 			o = that.options,
 			pr = that._proportionallyResizeElements,
 			ista = pr.length && ( /textarea/i ).test( pr[ 0 ].nodeName ),
@@ -4517,7 +4517,7 @@ __jQuery.ui.plugin.add( "resizable", "animate", {
 				( that.position.top - that.originalPosition.top ) ) || null;
 
 		that.element.animate(
-			__jQuery.extend( style, top && left ? { top: top, left: left } : {} ), {
+			jBPM.extend( style, top && left ? { top: top, left: left } : {} ), {
 				duration: o.animateDuration,
 				easing: o.animateEasing,
 				step: function() {
@@ -4530,7 +4530,7 @@ __jQuery.ui.plugin.add( "resizable", "animate", {
 					};
 
 					if ( pr && pr.length ) {
-						__jQuery( pr[ 0 ] ).css( { width: data.width, height: data.height } );
+						jBPM( pr[ 0 ] ).css( { width: data.width, height: data.height } );
 					}
 
 					// Propagating resize, and updating values for each animation step
@@ -4544,11 +4544,11 @@ __jQuery.ui.plugin.add( "resizable", "animate", {
 
 } );
 
-__jQuery.ui.plugin.add( "resizable", "containment", {
+jBPM.ui.plugin.add( "resizable", "containment", {
 
 	start: function() {
 		var element, p, co, ch, cw, width, height,
-			that = __jQuery( this ).resizable( "instance" ),
+			that = jBPM( this ).resizable( "instance" ),
 			o = that.options,
 			el = that.element,
 			oc = o.containment,
@@ -4560,7 +4560,7 @@ __jQuery.ui.plugin.add( "resizable", "containment", {
 			return;
 		}
 
-		that.containerElement = __jQuery( ce );
+		that.containerElement = jBPM( ce );
 
 		if ( /document/.test( oc ) || oc === document ) {
 			that.containerOffset = {
@@ -4573,16 +4573,16 @@ __jQuery.ui.plugin.add( "resizable", "containment", {
 			};
 
 			that.parentData = {
-				element: __jQuery( document ),
+				element: jBPM( document ),
 				left: 0,
 				top: 0,
-				width: __jQuery( document ).width(),
-				height: __jQuery( document ).height() || document.body.parentNode.scrollHeight
+				width: jBPM( document ).width(),
+				height: jBPM( document ).height() || document.body.parentNode.scrollHeight
 			};
 		} else {
-			element = __jQuery( ce );
+			element = jBPM( ce );
 			p = [];
-			__jQuery( [ "Top", "Right", "Left", "Bottom" ] ).each( function( i, name ) {
+			jBPM( [ "Top", "Right", "Left", "Bottom" ] ).each( function( i, name ) {
 				p[ i ] = that._num( element.css( "padding" + name ) );
 			} );
 
@@ -4611,7 +4611,7 @@ __jQuery.ui.plugin.add( "resizable", "containment", {
 
 	resize: function( event ) {
 		var woset, hoset, isParent, isOffsetRelative,
-			that = __jQuery( this ).resizable( "instance" ),
+			that = jBPM( this ).resizable( "instance" ),
 			o = that.options,
 			co = that.containerOffset,
 			cp = that.position,
@@ -4699,18 +4699,18 @@ __jQuery.ui.plugin.add( "resizable", "containment", {
 	},
 
 	stop: function() {
-		var that = __jQuery( this ).resizable( "instance" ),
+		var that = jBPM( this ).resizable( "instance" ),
 			o = that.options,
 			co = that.containerOffset,
 			cop = that.containerPosition,
 			ce = that.containerElement,
-			helper = __jQuery( that.helper ),
+			helper = jBPM( that.helper ),
 			ho = helper.offset(),
 			w = helper.outerWidth() - that.sizeDiff.width,
 			h = helper.outerHeight() - that.sizeDiff.height;
 
 		if ( that._helper && !o.animate && ( /relative/ ).test( ce.css( "position" ) ) ) {
-			__jQuery( this ).css( {
+			jBPM( this ).css( {
 				left: ho.left - cop.left - co.left,
 				width: w,
 				height: h
@@ -4718,7 +4718,7 @@ __jQuery.ui.plugin.add( "resizable", "containment", {
 		}
 
 		if ( that._helper && !o.animate && ( /static/ ).test( ce.css( "position" ) ) ) {
-			__jQuery( this ).css( {
+			jBPM( this ).css( {
 				left: ho.left - cop.left - co.left,
 				width: w,
 				height: h
@@ -4727,14 +4727,14 @@ __jQuery.ui.plugin.add( "resizable", "containment", {
 	}
 } );
 
-__jQuery.ui.plugin.add( "resizable", "alsoResize", {
+jBPM.ui.plugin.add( "resizable", "alsoResize", {
 
 	start: function() {
-		var that = __jQuery( this ).resizable( "instance" ),
+		var that = jBPM( this ).resizable( "instance" ),
 			o = that.options;
 
-		__jQuery( o.alsoResize ).each( function() {
-			var el = __jQuery( this );
+		jBPM( o.alsoResize ).each( function() {
+			var el = jBPM( this );
 			el.data( "ui-resizable-alsoresize", {
 				width: parseFloat( el.width() ), height: parseFloat( el.height() ),
 				left: parseFloat( el.css( "left" ) ), top: parseFloat( el.css( "top" ) )
@@ -4743,7 +4743,7 @@ __jQuery.ui.plugin.add( "resizable", "alsoResize", {
 	},
 
 	resize: function( event, ui ) {
-		var that = __jQuery( this ).resizable( "instance" ),
+		var that = jBPM( this ).resizable( "instance" ),
 			o = that.options,
 			os = that.originalSize,
 			op = that.originalPosition,
@@ -4754,13 +4754,13 @@ __jQuery.ui.plugin.add( "resizable", "alsoResize", {
 				left: ( that.position.left - op.left ) || 0
 			};
 
-			__jQuery( o.alsoResize ).each( function() {
-				var el = __jQuery( this ), start = __jQuery( this ).data( "ui-resizable-alsoresize" ), style = {},
+			jBPM( o.alsoResize ).each( function() {
+				var el = jBPM( this ), start = jBPM( this ).data( "ui-resizable-alsoresize" ), style = {},
 					css = el.parents( ui.originalElement[ 0 ] ).length ?
 							[ "width", "height" ] :
 							[ "width", "height", "top", "left" ];
 
-				__jQuery.each( css, function( i, prop ) {
+				jBPM.each( css, function( i, prop ) {
 					var sum = ( start[ prop ] || 0 ) + ( delta[ prop ] || 0 );
 					if ( sum && sum >= 0 ) {
 						style[ prop ] = sum || null;
@@ -4772,15 +4772,15 @@ __jQuery.ui.plugin.add( "resizable", "alsoResize", {
 	},
 
 	stop: function() {
-		__jQuery( this ).removeData( "ui-resizable-alsoresize" );
+		jBPM( this ).removeData( "ui-resizable-alsoresize" );
 	}
 } );
 
-__jQuery.ui.plugin.add( "resizable", "ghost", {
+jBPM.ui.plugin.add( "resizable", "ghost", {
 
 	start: function() {
 
-		var that = __jQuery( this ).resizable( "instance" ), cs = that.size;
+		var that = jBPM( this ).resizable( "instance" ), cs = that.size;
 
 		that.ghost = that.originalElement.clone();
 		that.ghost.css( {
@@ -4798,7 +4798,7 @@ __jQuery.ui.plugin.add( "resizable", "ghost", {
 
 		// DEPRECATED
 		// TODO: remove after 1.12
-		if ( __jQuery.uiBackCompat !== false && typeof that.options.ghost === "string" ) {
+		if ( jBPM.uiBackCompat !== false && typeof that.options.ghost === "string" ) {
 
 			// Ghost option
 			that.ghost.addClass( this.options.ghost );
@@ -4809,7 +4809,7 @@ __jQuery.ui.plugin.add( "resizable", "ghost", {
 	},
 
 	resize: function() {
-		var that = __jQuery( this ).resizable( "instance" );
+		var that = jBPM( this ).resizable( "instance" );
 		if ( that.ghost ) {
 			that.ghost.css( {
 				position: "relative",
@@ -4820,7 +4820,7 @@ __jQuery.ui.plugin.add( "resizable", "ghost", {
 	},
 
 	stop: function() {
-		var that = __jQuery( this ).resizable( "instance" );
+		var that = jBPM( this ).resizable( "instance" );
 		if ( that.ghost && that.helper ) {
 			that.helper.get( 0 ).removeChild( that.ghost.get( 0 ) );
 		}
@@ -4828,11 +4828,11 @@ __jQuery.ui.plugin.add( "resizable", "ghost", {
 
 } );
 
-__jQuery.ui.plugin.add( "resizable", "grid", {
+jBPM.ui.plugin.add( "resizable", "grid", {
 
 	resize: function() {
 		var outerDimensions,
-			that = __jQuery( this ).resizable( "instance" ),
+			that = jBPM( this ).resizable( "instance" ),
 			o = that.options,
 			cs = that.size,
 			os = that.originalSize,
@@ -4902,7 +4902,7 @@ __jQuery.ui.plugin.add( "resizable", "grid", {
 
 } );
 
-var widgetsResizable = __jQuery.ui.resizable;
+var widgetsResizable = jBPM.ui.resizable;
 
 
 /*!
@@ -4923,7 +4923,7 @@ var widgetsResizable = __jQuery.ui.resizable;
 
 
 
-var widgetsSelectable = __jQuery.widget( "ui.selectable", __jQuery.ui.mouse, {
+var widgetsSelectable = jBPM.widget( "ui.selectable", jBPM.ui.mouse, {
 	version: "1.12.1",
 	options: {
 		appendTo: "body",
@@ -4949,17 +4949,17 @@ var widgetsSelectable = __jQuery.widget( "ui.selectable", __jQuery.ui.mouse, {
 
 		// Cache selectee children based on filter
 		this.refresh = function() {
-			that.elementPos = __jQuery( that.element[ 0 ] ).offset();
-			that.selectees = __jQuery( that.options.filter, that.element[ 0 ] );
+			that.elementPos = jBPM( that.element[ 0 ] ).offset();
+			that.selectees = jBPM( that.options.filter, that.element[ 0 ] );
 			that._addClass( that.selectees, "ui-selectee" );
 			that.selectees.each( function() {
-				var $this = __jQuery( this ),
+				var $this = jBPM( this ),
 					selecteeOffset = $this.offset(),
 					pos = {
 						left: selecteeOffset.left - that.elementPos.left,
 						top: selecteeOffset.top - that.elementPos.top
 					};
-				__jQuery.data( this, "selectable-item", {
+				jBPM.data( this, "selectable-item", {
 					element: this,
 					$element: $this,
 					left: pos.left,
@@ -4977,7 +4977,7 @@ var widgetsSelectable = __jQuery.widget( "ui.selectable", __jQuery.ui.mouse, {
 
 		this._mouseInit();
 
-		this.helper = __jQuery( "<div>" );
+		this.helper = jBPM( "<div>" );
 		this._addClass( this.helper, "ui-selectable-helper" );
 	},
 
@@ -4991,17 +4991,17 @@ var widgetsSelectable = __jQuery.widget( "ui.selectable", __jQuery.ui.mouse, {
 			options = this.options;
 
 		this.opos = [ event.pageX, event.pageY ];
-		this.elementPos = __jQuery( this.element[ 0 ] ).offset();
+		this.elementPos = jBPM( this.element[ 0 ] ).offset();
 
 		if ( this.options.disabled ) {
 			return;
 		}
 
-		this.selectees = __jQuery( options.filter, this.element[ 0 ] );
+		this.selectees = jBPM( options.filter, this.element[ 0 ] );
 
 		this._trigger( "start", event );
 
-		__jQuery( options.appendTo ).append( this.helper );
+		jBPM( options.appendTo ).append( this.helper );
 
 		// position helper (lasso)
 		this.helper.css( {
@@ -5016,7 +5016,7 @@ var widgetsSelectable = __jQuery.widget( "ui.selectable", __jQuery.ui.mouse, {
 		}
 
 		this.selectees.filter( ".ui-selected" ).each( function() {
-			var selectee = __jQuery.data( this, "selectable-item" );
+			var selectee = jBPM.data( this, "selectable-item" );
 			selectee.startselected = true;
 			if ( !event.metaKey && !event.ctrlKey ) {
 				that._removeClass( selectee.$element, "ui-selected" );
@@ -5031,9 +5031,9 @@ var widgetsSelectable = __jQuery.widget( "ui.selectable", __jQuery.ui.mouse, {
 			}
 		} );
 
-		__jQuery( event.target ).parents().addBack().each( function() {
+		jBPM( event.target ).parents().addBack().each( function() {
 			var doSelect,
-				selectee = __jQuery.data( this, "selectable-item" );
+				selectee = jBPM.data( this, "selectable-item" );
 			if ( selectee ) {
 				doSelect = ( !event.metaKey && !event.ctrlKey ) ||
 					!selectee.$element.hasClass( "ui-selected" );
@@ -5080,7 +5080,7 @@ var widgetsSelectable = __jQuery.widget( "ui.selectable", __jQuery.ui.mouse, {
 		this.helper.css( { left: x1, top: y1, width: x2 - x1, height: y2 - y1 } );
 
 		this.selectees.each( function() {
-			var selectee = __jQuery.data( this, "selectable-item" ),
+			var selectee = jBPM.data( this, "selectable-item" ),
 				hit = false,
 				offset = {};
 
@@ -5170,8 +5170,8 @@ var widgetsSelectable = __jQuery.widget( "ui.selectable", __jQuery.ui.mouse, {
 
 		this.dragged = false;
 
-		__jQuery( ".ui-unselecting", this.element[ 0 ] ).each( function() {
-			var selectee = __jQuery.data( this, "selectable-item" );
+		jBPM( ".ui-unselecting", this.element[ 0 ] ).each( function() {
+			var selectee = jBPM.data( this, "selectable-item" );
 			that._removeClass( selectee.$element, "ui-unselecting" );
 			selectee.unselecting = false;
 			selectee.startselected = false;
@@ -5179,8 +5179,8 @@ var widgetsSelectable = __jQuery.widget( "ui.selectable", __jQuery.ui.mouse, {
 				unselected: selectee.element
 			} );
 		} );
-		__jQuery( ".ui-selecting", this.element[ 0 ] ).each( function() {
-			var selectee = __jQuery.data( this, "selectable-item" );
+		jBPM( ".ui-selecting", this.element[ 0 ] ).each( function() {
+			var selectee = jBPM.data( this, "selectable-item" );
 			that._removeClass( selectee.$element, "ui-selecting" )
 				._addClass( selectee.$element, "ui-selected" );
 			selectee.selecting = false;
@@ -5218,7 +5218,7 @@ var widgetsSelectable = __jQuery.widget( "ui.selectable", __jQuery.ui.mouse, {
 
 
 
-var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
+var widgetsSortable = jBPM.widget( "ui.sortable", jBPM.ui.mouse, {
 	version: "1.12.1",
 	widgetEventPrefix: "sort",
 	ready: false,
@@ -5301,7 +5301,7 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 	_setHandleClassName: function() {
 		var that = this;
 		this._removeClass( this.element.find( ".ui-sortable-handle" ), "ui-sortable-handle" );
-		__jQuery.each( this.items, function() {
+		jBPM.each( this.items, function() {
 			that._addClass(
 				this.instance.options.handle ?
 					this.item.find( this.instance.options.handle ) :
@@ -5338,21 +5338,21 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 		this._refreshItems( event );
 
 		//Find out if the clicked node (or one of its parents) is a actual item in this.items
-		__jQuery( event.target ).parents().each( function() {
-			if ( __jQuery.data( this, that.widgetName + "-item" ) === that ) {
-				currentItem = __jQuery( this );
+		jBPM( event.target ).parents().each( function() {
+			if ( jBPM.data( this, that.widgetName + "-item" ) === that ) {
+				currentItem = jBPM( this );
 				return false;
 			}
 		} );
-		if ( __jQuery.data( event.target, that.widgetName + "-item" ) === that ) {
-			currentItem = __jQuery( event.target );
+		if ( jBPM.data( event.target, that.widgetName + "-item" ) === that ) {
+			currentItem = jBPM( event.target );
 		}
 
 		if ( !currentItem ) {
 			return false;
 		}
 		if ( this.options.handle && !overrideHandle ) {
-			__jQuery( this.options.handle, currentItem ).find( "*" ).addBack().each( function() {
+			jBPM( this.options.handle, currentItem ).find( "*" ).addBack().each( function() {
 				if ( this === event.target ) {
 					validHandle = true;
 				}
@@ -5403,7 +5403,7 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 			left: this.offset.left - this.margins.left
 		};
 
-		__jQuery.extend( this.offset, {
+		jBPM.extend( this.offset, {
 			click: { //Where the click happened, relative to the element
 				left: event.pageX - this.offset.left,
 				top: event.pageY - this.offset.top
@@ -5456,7 +5456,7 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 			body.css( "cursor", o.cursor );
 
 			this.storedStylesheet =
-				__jQuery( "<style>*{ cursor: " + o.cursor + " !important; }</style>" ).appendTo( body );
+				jBPM( "<style>*{ cursor: " + o.cursor + " !important; }</style>" ).appendTo( body );
 		}
 
 		if ( o.opacity ) { // opacity option
@@ -5495,12 +5495,12 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 		}
 
 		//Prepare possible droppables
-		if ( __jQuery.ui.ddmanager ) {
-			__jQuery.ui.ddmanager.current = this;
+		if ( jBPM.ui.ddmanager ) {
+			jBPM.ui.ddmanager.current = this;
 		}
 
-		if ( __jQuery.ui.ddmanager && !o.dropBehaviour ) {
-			__jQuery.ui.ddmanager.prepareOffsets( this, event );
+		if ( jBPM.ui.ddmanager && !o.dropBehaviour ) {
+			jBPM.ui.ddmanager.prepareOffsets( this, event );
 		}
 
 		this.dragging = true;
@@ -5572,8 +5572,8 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 
 			}
 
-			if ( scrolled !== false && __jQuery.ui.ddmanager && !o.dropBehaviour ) {
-				__jQuery.ui.ddmanager.prepareOffsets( this, event );
+			if ( scrolled !== false && jBPM.ui.ddmanager && !o.dropBehaviour ) {
+				jBPM.ui.ddmanager.prepareOffsets( this, event );
 			}
 		}
 
@@ -5615,9 +5615,9 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 			// no action if the item moved is the parent of the item checked
 			if ( itemElement !== this.currentItem[ 0 ] &&
 				this.placeholder[ intersection === 1 ? "next" : "prev" ]()[ 0 ] !== itemElement &&
-				!__jQuery.contains( this.placeholder[ 0 ], itemElement ) &&
+				!jBPM.contains( this.placeholder[ 0 ], itemElement ) &&
 				( this.options.type === "semi-dynamic" ?
-					!__jQuery.contains( this.element[ 0 ], itemElement ) :
+					!jBPM.contains( this.element[ 0 ], itemElement ) :
 					true
 				)
 			) {
@@ -5639,8 +5639,8 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 		this._contactContainers( event );
 
 		//Interconnect with droppables
-		if ( __jQuery.ui.ddmanager ) {
-			__jQuery.ui.ddmanager.drag( this, event );
+		if ( jBPM.ui.ddmanager ) {
+			jBPM.ui.ddmanager.drag( this, event );
 		}
 
 		//Call callbacks
@@ -5658,8 +5658,8 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 		}
 
 		//If we are using droppables, inform the manager about the drop
-		if ( __jQuery.ui.ddmanager && !this.options.dropBehaviour ) {
-			__jQuery.ui.ddmanager.drop( this, event );
+		if ( jBPM.ui.ddmanager && !this.options.dropBehaviour ) {
+			jBPM.ui.ddmanager.drop( this, event );
 		}
 
 		if ( this.options.revert ) {
@@ -5683,7 +5683,7 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 					);
 			}
 			this.reverting = true;
-			__jQuery( this.helper ).animate(
+			jBPM( this.helper ).animate(
 				animation,
 				parseInt( this.options.revert, 10 ) || 500,
 				function() {
@@ -5702,7 +5702,7 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 
 		if ( this.dragging ) {
 
-			this._mouseUp( new __jQuery.Event( "mouseup", { target: null } ) );
+			this._mouseUp( new jBPM.Event( "mouseup", { target: null } ) );
 
 			if ( this.options.helper === "original" ) {
 				this.currentItem.css( this._storedCSS );
@@ -5724,7 +5724,7 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 
 		if ( this.placeholder ) {
 
-			//__jQuery(this.placeholder[0]).remove(); would have been the jQuery way - unfortunately,
+			//jBPM(this.placeholder[0]).remove(); would have been the jQuery way - unfortunately,
 			// it unbinds ALL events from the original node!
 			if ( this.placeholder[ 0 ].parentNode ) {
 				this.placeholder[ 0 ].parentNode.removeChild( this.placeholder[ 0 ] );
@@ -5734,7 +5734,7 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 				this.helper.remove();
 			}
 
-			__jQuery.extend( this, {
+			jBPM.extend( this, {
 				helper: null,
 				dragging: false,
 				reverting: false,
@@ -5742,9 +5742,9 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 			} );
 
 			if ( this.domPosition.prev ) {
-				__jQuery( this.domPosition.prev ).after( this.currentItem );
+				jBPM( this.domPosition.prev ).after( this.currentItem );
 			} else {
-				__jQuery( this.domPosition.parent ).prepend( this.currentItem );
+				jBPM( this.domPosition.parent ).prepend( this.currentItem );
 			}
 		}
 
@@ -5758,8 +5758,8 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 			str = [];
 		o = o || {};
 
-		__jQuery( items ).each( function() {
-			var res = ( __jQuery( o.item || this ).attr( o.attribute || "id" ) || "" )
+		jBPM( items ).each( function() {
+			var res = ( jBPM( o.item || this ).attr( o.attribute || "id" ) || "" )
 				.match( o.expression || ( /(.+)[\-=_](.+)/ ) );
 			if ( res ) {
 				str.push(
@@ -5784,7 +5784,7 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 		o = o || {};
 
 		items.each( function() {
-			ret.push( __jQuery( o.item || this ).attr( o.attribute || "id" ) || "" );
+			ret.push( jBPM( o.item || this ).attr( o.attribute || "id" ) || "" );
 		} );
 		return ret;
 
@@ -5901,13 +5901,13 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 
 		if ( connectWith && connected ) {
 			for ( i = connectWith.length - 1; i >= 0; i-- ) {
-				cur = __jQuery( connectWith[ i ], this.document[ 0 ] );
+				cur = jBPM( connectWith[ i ], this.document[ 0 ] );
 				for ( j = cur.length - 1; j >= 0; j-- ) {
-					inst = __jQuery.data( cur[ j ], this.widgetFullName );
+					inst = jBPM.data( cur[ j ], this.widgetFullName );
 					if ( inst && inst !== this && !inst.options.disabled ) {
-						queries.push( [ __jQuery.isFunction( inst.options.items ) ?
+						queries.push( [ jBPM.isFunction( inst.options.items ) ?
 							inst.options.items.call( inst.element ) :
-							__jQuery( inst.options.items, inst.element )
+							jBPM( inst.options.items, inst.element )
 								.not( ".ui-sortable-helper" )
 								.not( ".ui-sortable-placeholder" ), inst ] );
 					}
@@ -5915,10 +5915,10 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 			}
 		}
 
-		queries.push( [ __jQuery.isFunction( this.options.items ) ?
+		queries.push( [ jBPM.isFunction( this.options.items ) ?
 			this.options.items
 				.call( this.element, null, { options: this.options, item: this.currentItem } ) :
-			__jQuery( this.options.items, this.element )
+			jBPM( this.options.items, this.element )
 				.not( ".ui-sortable-helper" )
 				.not( ".ui-sortable-placeholder" ), this ] );
 
@@ -5929,7 +5929,7 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 			queries[ i ][ 0 ].each( addItems );
 		}
 
-		return __jQuery( items );
+		return jBPM( items );
 
 	},
 
@@ -5937,7 +5937,7 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 
 		var list = this.currentItem.find( ":data(" + this.widgetName + "-item)" );
 
-		this.items = __jQuery.grep( this.items, function( item ) {
+		this.items = jBPM.grep( this.items, function( item ) {
 			for ( var j = 0; j < list.length; j++ ) {
 				if ( list[ j ] === item.item[ 0 ] ) {
 					return false;
@@ -5955,22 +5955,22 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 
 		var i, j, cur, inst, targetData, _queries, item, queriesLength,
 			items = this.items,
-			queries = [ [ __jQuery.isFunction( this.options.items ) ?
+			queries = [ [ jBPM.isFunction( this.options.items ) ?
 				this.options.items.call( this.element[ 0 ], event, { item: this.currentItem } ) :
-				__jQuery( this.options.items, this.element ), this ] ],
+				jBPM( this.options.items, this.element ), this ] ],
 			connectWith = this._connectWith();
 
 		//Shouldn't be run the first time through due to massive slow-down
 		if ( connectWith && this.ready ) {
 			for ( i = connectWith.length - 1; i >= 0; i-- ) {
-				cur = __jQuery( connectWith[ i ], this.document[ 0 ] );
+				cur = jBPM( connectWith[ i ], this.document[ 0 ] );
 				for ( j = cur.length - 1; j >= 0; j-- ) {
-					inst = __jQuery.data( cur[ j ], this.widgetFullName );
+					inst = jBPM.data( cur[ j ], this.widgetFullName );
 					if ( inst && inst !== this && !inst.options.disabled ) {
-						queries.push( [ __jQuery.isFunction( inst.options.items ) ?
+						queries.push( [ jBPM.isFunction( inst.options.items ) ?
 							inst.options.items
 								.call( inst.element[ 0 ], event, { item: this.currentItem } ) :
-							__jQuery( inst.options.items, inst.element ), inst ] );
+							jBPM( inst.options.items, inst.element ), inst ] );
 						this.containers.push( inst );
 					}
 				}
@@ -5982,7 +5982,7 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 			_queries = queries[ i ][ 0 ];
 
 			for ( j = 0, queriesLength = _queries.length; j < queriesLength; j++ ) {
-				item = __jQuery( _queries[ j ] );
+				item = jBPM( _queries[ j ] );
 
 				// Data for target checking (mouse manager)
 				item.data( this.widgetName + "-item", targetData );
@@ -6023,7 +6023,7 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 			}
 
 			t = this.options.toleranceElement ?
-				__jQuery( this.options.toleranceElement, item.item ) :
+				jBPM( this.options.toleranceElement, item.item ) :
 				item.item;
 
 			if ( !fast ) {
@@ -6064,7 +6064,7 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 				element: function() {
 
 					var nodeName = that.currentItem[ 0 ].nodeName.toLowerCase(),
-						element = __jQuery( "<" + nodeName + ">", that.document[ 0 ] );
+						element = jBPM( "<" + nodeName + ">", that.document[ 0 ] );
 
 						that._addClass( element, "ui-sortable-placeholder",
 								className || that.currentItem[ 0 ].className )
@@ -6073,7 +6073,7 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 					if ( nodeName === "tbody" ) {
 						that._createTrPlaceholder(
 							that.currentItem.find( "tr" ).eq( 0 ),
-							__jQuery( "<tr>", that.document[ 0 ] ).appendTo( element )
+							jBPM( "<tr>", that.document[ 0 ] ).appendTo( element )
 						);
 					} else if ( nodeName === "tr" ) {
 						that._createTrPlaceholder( that.currentItem, element );
@@ -6116,7 +6116,7 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 		}
 
 		//Create the placeholder
-		that.placeholder = __jQuery( o.placeholder.element.call( that.element, that.currentItem ) );
+		that.placeholder = jBPM( o.placeholder.element.call( that.element, that.currentItem ) );
 
 		//Append it after the actual current item
 		that.currentItem.after( that.placeholder );
@@ -6130,8 +6130,8 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 		var that = this;
 
 		sourceTr.children().each( function() {
-			__jQuery( "<td>&#160;</td>", that.document[ 0 ] )
-				.attr( "colspan", __jQuery( this ).attr( "colspan" ) || 1 )
+			jBPM( "<td>&#160;</td>", that.document[ 0 ] )
+				.attr( "colspan", jBPM( this ).attr( "colspan" ) || 1 )
 				.appendTo( targetTr );
 		} );
 	},
@@ -6146,7 +6146,7 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 		for ( i = this.containers.length - 1; i >= 0; i-- ) {
 
 			// Never consider a container that's located within the item itself
-			if ( __jQuery.contains( this.currentItem[ 0 ], this.containers[ i ].element[ 0 ] ) ) {
+			if ( jBPM.contains( this.currentItem[ 0 ], this.containers[ i ].element[ 0 ] ) ) {
 				continue;
 			}
 
@@ -6154,7 +6154,7 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 
 				// If we've already found a container and it's more "inner" than this, then continue
 				if ( innermostContainer &&
-						__jQuery.contains(
+						jBPM.contains(
 							this.containers[ i ].element[ 0 ],
 							innermostContainer.element[ 0 ] ) ) {
 					continue;
@@ -6197,7 +6197,7 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 			axis = floating ? "pageX" : "pageY";
 
 			for ( j = this.items.length - 1; j >= 0; j-- ) {
-				if ( !__jQuery.contains(
+				if ( !jBPM.contains(
 						this.containers[ innermostIndex ].element[ 0 ], this.items[ j ].item[ 0 ] )
 				) {
 					continue;
@@ -6251,13 +6251,13 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 	_createHelper: function( event ) {
 
 		var o = this.options,
-			helper = __jQuery.isFunction( o.helper ) ?
-				__jQuery( o.helper.apply( this.element[ 0 ], [ event, this.currentItem ] ) ) :
+			helper = jBPM.isFunction( o.helper ) ?
+				jBPM( o.helper.apply( this.element[ 0 ], [ event, this.currentItem ] ) ) :
 				( o.helper === "clone" ? this.currentItem.clone() : this.currentItem );
 
 		//Add the helper to the DOM if that didn't happen already
 		if ( !helper.parents( "body" ).length ) {
-			__jQuery( o.appendTo !== "parent" ?
+			jBPM( o.appendTo !== "parent" ?
 				o.appendTo :
 				this.currentItem[ 0 ].parentNode )[ 0 ].appendChild( helper[ 0 ] );
 		}
@@ -6287,7 +6287,7 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 		if ( typeof obj === "string" ) {
 			obj = obj.split( " " );
 		}
-		if ( __jQuery.isArray( obj ) ) {
+		if ( jBPM.isArray( obj ) ) {
 			obj = { left: +obj[ 0 ], top: +obj[ 1 ] || 0 };
 		}
 		if ( "left" in obj ) {
@@ -6318,7 +6318,7 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 		// the document, which means that the scroll is included in the initial calculation of the
 		// offset of the parent, and never recalculated upon drag
 		if ( this.cssPosition === "absolute" && this.scrollParent[ 0 ] !== this.document[ 0 ] &&
-				__jQuery.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) {
+				jBPM.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) {
 			po.left += this.scrollParent.scrollLeft();
 			po.top += this.scrollParent.scrollTop();
 		}
@@ -6327,7 +6327,7 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 		// information with an ugly IE fix
 		if ( this.offsetParent[ 0 ] === this.document[ 0 ].body ||
 				( this.offsetParent[ 0 ].tagName &&
-				this.offsetParent[ 0 ].tagName.toLowerCase() === "html" && __jQuery.ui.ie ) ) {
+				this.offsetParent[ 0 ].tagName.toLowerCase() === "html" && jBPM.ui.ie ) ) {
 			po = { top: 0, left: 0 };
 		}
 
@@ -6390,22 +6390,22 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 		}
 
 		if ( !( /^(document|window|parent)$/ ).test( o.containment ) ) {
-			ce = __jQuery( o.containment )[ 0 ];
-			co = __jQuery( o.containment ).offset();
-			over = ( __jQuery( ce ).css( "overflow" ) !== "hidden" );
+			ce = jBPM( o.containment )[ 0 ];
+			co = jBPM( o.containment ).offset();
+			over = ( jBPM( ce ).css( "overflow" ) !== "hidden" );
 
 			this.containment = [
-				co.left + ( parseInt( __jQuery( ce ).css( "borderLeftWidth" ), 10 ) || 0 ) +
-					( parseInt( __jQuery( ce ).css( "paddingLeft" ), 10 ) || 0 ) - this.margins.left,
-				co.top + ( parseInt( __jQuery( ce ).css( "borderTopWidth" ), 10 ) || 0 ) +
-					( parseInt( __jQuery( ce ).css( "paddingTop" ), 10 ) || 0 ) - this.margins.top,
+				co.left + ( parseInt( jBPM( ce ).css( "borderLeftWidth" ), 10 ) || 0 ) +
+					( parseInt( jBPM( ce ).css( "paddingLeft" ), 10 ) || 0 ) - this.margins.left,
+				co.top + ( parseInt( jBPM( ce ).css( "borderTopWidth" ), 10 ) || 0 ) +
+					( parseInt( jBPM( ce ).css( "paddingTop" ), 10 ) || 0 ) - this.margins.top,
 				co.left + ( over ? Math.max( ce.scrollWidth, ce.offsetWidth ) : ce.offsetWidth ) -
-					( parseInt( __jQuery( ce ).css( "borderLeftWidth" ), 10 ) || 0 ) -
-					( parseInt( __jQuery( ce ).css( "paddingRight" ), 10 ) || 0 ) -
+					( parseInt( jBPM( ce ).css( "borderLeftWidth" ), 10 ) || 0 ) -
+					( parseInt( jBPM( ce ).css( "paddingRight" ), 10 ) || 0 ) -
 					this.helperProportions.width - this.margins.left,
 				co.top + ( over ? Math.max( ce.scrollHeight, ce.offsetHeight ) : ce.offsetHeight ) -
-					( parseInt( __jQuery( ce ).css( "borderTopWidth" ), 10 ) || 0 ) -
-					( parseInt( __jQuery( ce ).css( "paddingBottom" ), 10 ) || 0 ) -
+					( parseInt( jBPM( ce ).css( "borderTopWidth" ), 10 ) || 0 ) -
+					( parseInt( jBPM( ce ).css( "paddingBottom" ), 10 ) || 0 ) -
 					this.helperProportions.height - this.margins.top
 			];
 		}
@@ -6420,7 +6420,7 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 		var mod = d === "absolute" ? 1 : -1,
 			scroll = this.cssPosition === "absolute" &&
 				!( this.scrollParent[ 0 ] !== this.document[ 0 ] &&
-				__jQuery.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) ?
+				jBPM.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) ?
 					this.offsetParent :
 					this.scrollParent,
 			scrollIsRootNode = ( /(html|body)/i ).test( scroll[ 0 ].tagName );
@@ -6466,7 +6466,7 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 			pageY = event.pageY,
 			scroll = this.cssPosition === "absolute" &&
 				!( this.scrollParent[ 0 ] !== this.document[ 0 ] &&
-				__jQuery.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) ?
+				jBPM.contains( this.scrollParent[ 0 ], this.offsetParent[ 0 ] ) ) ?
 					this.offsetParent :
 					this.scrollParent,
 				scrollIsRootNode = ( /(html|body)/i ).test( scroll[ 0 ].tagName );
@@ -6689,7 +6689,7 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 			this._trigger( "beforeStop", event, this._uiHash() );
 		}
 
-		//__jQuery(this.placeholder[0]).remove(); would have been the jQuery way - unfortunately,
+		//jBPM(this.placeholder[0]).remove(); would have been the jQuery way - unfortunately,
 		// it unbinds ALL events from the original node!
 		this.placeholder[ 0 ].parentNode.removeChild( this.placeholder[ 0 ] );
 
@@ -6715,7 +6715,7 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 	},
 
 	_trigger: function() {
-		if ( __jQuery.Widget.prototype._trigger.apply( this, arguments ) === false ) {
+		if ( jBPM.Widget.prototype._trigger.apply( this, arguments ) === false ) {
 			this.cancel();
 		}
 	},
@@ -6724,7 +6724,7 @@ var widgetsSortable = __jQuery.widget( "ui.sortable", __jQuery.ui.mouse, {
 		var inst = _inst || this;
 		return {
 			helper: inst.helper,
-			placeholder: inst.placeholder || __jQuery( [] ),
+			placeholder: inst.placeholder || jBPM( [] ),
 			position: inst.position,
 			originalPosition: inst.originalPosition,
 			offset: inst.positionAbs,

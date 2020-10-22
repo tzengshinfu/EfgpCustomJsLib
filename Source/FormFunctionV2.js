@@ -127,21 +127,21 @@ function DropdownList(dropdownList) {
             return result;
         }
 
-        var selectTag = __jQuery("<select>");
-        __jQuery(records).each(function (key, val) {
+        var selectTag = jBPM("<select>");
+        jBPM(records).each(function (key, val) {
             var text = getTagText(this, textTagName);
             var value = getTagText(this, valueTagName);
 
             //選項的值有重覆則不加入
             if (!allowDuplicateValue) {
-                if (selectTag.find("option[value='" + value + "']").length === 0) selectTag.append(__jQuery('<option></option>').val(value).html(text));
+                if (selectTag.find("option[value='" + value + "']").length === 0) selectTag.append(jBPM('<option></option>').val(value).html(text));
             }
             else {
-                selectTag.append(__jQuery('<option></option>').val(value).html(text));
+                selectTag.append(jBPM('<option></option>').val(value).html(text));
             }
         });
 
-        __jQuery(dropdownList).html(selectTag.html());
+        jBPM(dropdownList).html(selectTag.html());
 
         //還原更新畫面前的已選值
         if (dropdownList.hiddenControl) {
@@ -932,7 +932,7 @@ function Button(button) {
         showTable(page);
 
         searchContainer.appendChild(layoutTable);
-        __jQuery(searchContainer).draggable();
+        jBPM(searchContainer).draggable();
         document.getElementById(formId + "_shell").appendChild(searchContainer);
         button.searchWindow = searchContainer;
         button.searchWindow.submitButton = filterButton;
@@ -1152,19 +1152,19 @@ function Button(button) {
                 layoutCell3.appendChild(dataTable);
                 if (button.searchWindow) button.searchWindow.tableRows = dataTable.getElementsByClassName("dataRow");
 
-                var sortableTable = __jQuery(dataTable);
+                var sortableTable = jBPM(dataTable);
                 var sortableHeaders = sortableTable.find("th");
                 sortableHeaders.wrapInner('<span title="點擊欄名可排序"/>')
                     .each(function () {
-                        var th = __jQuery(this),
+                        var th = jBPM(this),
                             thIndex = th.index(),
                             inverse = false;
 
                         th.click(function () {
                             sortableTable.find("td").filter(function () {
-                                return __jQuery(this).index() === thIndex;
+                                return jBPM(this).index() === thIndex;
                             }).sortElements(function (a, b) {
-                                return (__jQuery.text([a]) > __jQuery.text([b])) ?
+                                return (jBPM.text([a]) > jBPM.text([b])) ?
                                     (inverse) ? -1 : 1
                                     : (inverse) ? 1 : -1;
                             }, function () {
@@ -2057,7 +2057,7 @@ function DialogInput(dialogInput) {
     dialogInput.onClick = function (func) {
         if (typeof func === "function") {
             dialogInput.buttonControl.onclick = null;
-            __jQuery(dialogInput.buttonControl).click(function () {
+            jBPM(dialogInput.buttonControl).click(function () {
                 try {
                     func();
                 }
@@ -2547,23 +2547,10 @@ function checkConditionError(condition, errorMessage) {
 * @param {function} task 欲執行的function內容
 */
 function runLongTimeTask(task) {
-    //EasyFlow GP 5.6在IE8以上showDialog函式會失效,故自行建立讀取等待畫面
-    if (isChrome === false) {
-        var temp = document.createElement("DIV");
-        temp.innerHTML = "<div id=\"loadingOverlay\" style=\"position: fixed;width: 100%;height: 100%;top: 0;left: 0;right: 0;bottom: 0;background-color: rgba(0,0,0,0.1);z-index: 2;cursor: wait;display: table;\"><div style=\"text-align: center;display: table-cell;vertical-align: middle;\"></div></div>";
-        var loadingOverlay = temp.firstChild;
-        var loadingImage = document.createElement("IMG");
-        loadingImage.style.width = "80px";
-        loadingImage.style.height = "150px";
-        loadingImage.src = "/NaNaWeb/theme/default/images/index_images/ajax-loader.gif";
-        loadingOverlay.firstChild.appendChild(loadingImage);
-        window.parent.parent.parent.document.body.appendChild(loadingOverlay);
-    }
-    else {
-        window.parent.parent.parent.document.getElementById("gDialog_overlay").style.visibility = "visible";
-        window.parent.parent.parent.document.getElementById("gDialog_overlay").style.backgroundColor = "rgba(0,0,0,0.1)";
-        window.parent.parent.parent.document.getElementById("gDialog").style.visibility = "visible";
-    }
+    var temp = document.createElement("DIV");
+    temp.innerHTML = "<div id=\"loadingOverlay\" style=\"position: fixed;width: 100%;height: 100%;top: 0;left: 0;right: 0;bottom: 0;background-color: rgba(0,0,0,0.1);z-index: 2;cursor: wait;display: table;\"><div style=\"text-align: center;display: table-cell;vertical-align: middle;\"></div></div>";
+    var loadingOverlay = temp.firstChild;
+    window.parent.parent.parent.document.body.appendChild(loadingOverlay);
 
     setTimeout(function () {
         try {
@@ -2573,14 +2560,8 @@ function runLongTimeTask(task) {
             showException(ex);
         }
         finally {
-            if (isChrome === false) {
-                var loadingOverlay = window.parent.parent.parent.document.getElementById("loadingOverlay");
-                loadingOverlay.parentNode.removeChild(loadingOverlay);
-            } else {
-                window.parent.parent.parent.document.getElementById("gDialog_overlay").style.visibility = "hidden";
-                window.parent.parent.parent.document.getElementById("gDialog_overlay").style.backgroundColor = "";
-                window.parent.parent.parent.document.getElementById("gDialog").style.visibility = "hidden";
-            }
+            var loadingOverlay = window.parent.parent.parent.document.getElementById("loadingOverlay");
+            loadingOverlay.parentNode.removeChild(loadingOverlay);
         }
     }, 0);
 }
