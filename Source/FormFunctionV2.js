@@ -2548,8 +2548,13 @@ function checkConditionError(condition, errorMessage) {
 */
 function runLongTimeTask(task) {
     var temp = document.createElement("DIV");
-    temp.innerHTML = "<div id=\"loadingOverlay\" style=\"position: fixed;width: 100%;height: 100%;top: 0;left: 0;right: 0;bottom: 0;background-color: rgba(0,0,0,0.1);z-index: 2;cursor: wait;display: table;\"><div style=\"text-align: center;display: table-cell;vertical-align: middle;\"></div></div>";
+    temp.innerHTML = "<div id=\"loadingOverlay\" style=\"position: fixed;width: 100%;height: 100%;top: 0;left: 0;right: 0;bottom: 0;background-color: rgba(0,0,0,0.1);z-index: 2;display: table;\"><div style=\"text-align: center;display: table-cell;vertical-align: middle;\"></div></div>";
     var loadingOverlay = temp.firstChild;
+    var loadingImage = document.createElement("IMG");
+    loadingImage.style.width = "80px";
+    loadingImage.style.height = "150px";
+    loadingImage.src = "/NaNaWeb/theme/default/images/index_images/ajax-loader.gif";
+    loadingOverlay.firstChild.appendChild(loadingImage);
     window.parent.parent.parent.document.body.appendChild(loadingOverlay);
 
     setTimeout(function () {
