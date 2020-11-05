@@ -22,7 +22,7 @@
  *   The <td>'s parent (<tr>) will be sorted instead
  *   of the <td> itself.
  */
-jBPM.fn.sortElements = (function () {
+jQuery.fn.sortElements = (function () {
 
     var sort = [].sort;
 

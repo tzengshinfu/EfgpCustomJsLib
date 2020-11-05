@@ -11,6 +11,7 @@ var color = { required: "#FFFF99", disabled: "#F0F0F0", optional: "#FFFFFF", non
 var isChrome = (navigator.userAgent.indexOf("Chrome") != -1) ? true : false;
 var isIE11 = (navigator.userAgent.indexOf("Trident/7.0") != -1) ? true : false;
 var range = { isGreaterZero: "> 0", isGreaterEqualZero: ">= 0", isLessZero: "< 0", isLessEqualZero: "<= 0", unlimited: "" };
+jQuery = (window["jBPM"]) ? window["jBPM"] : window["__jQuery"];
 
 /**
 * 下拉選單自訂控制項(新增便捷屬性/方法)
@@ -127,21 +128,21 @@ function DropdownList(dropdownList) {
             return result;
         }
 
-        var selectTag = jBPM("<select>");
-        jBPM(records).each(function (key, val) {
+        var selectTag = jQuery("<select>");
+        jQuery(records).each(function (key, val) {
             var text = getTagText(this, textTagName);
             var value = getTagText(this, valueTagName);
 
             //選項的值有重覆則不加入
             if (!allowDuplicateValue) {
-                if (selectTag.find("option[value='" + value + "']").length === 0) selectTag.append(jBPM('<option></option>').val(value).html(text));
+                if (selectTag.find("option[value='" + value + "']").length === 0) selectTag.append(jQuery('<option></option>').val(value).html(text));
             }
             else {
-                selectTag.append(jBPM('<option></option>').val(value).html(text));
+                selectTag.append(jQuery('<option></option>').val(value).html(text));
             }
         });
 
-        jBPM(dropdownList).html(selectTag.html());
+        jQuery(dropdownList).html(selectTag.html());
 
         //還原更新畫面前的已選值
         if (dropdownList.hiddenControl) {
@@ -932,7 +933,7 @@ function Button(button) {
         showTable(page);
 
         searchContainer.appendChild(layoutTable);
-        jBPM(searchContainer).draggable();
+        jQuery(searchContainer).draggable();
         document.getElementById(formId + "_shell").appendChild(searchContainer);
         button.searchWindow = searchContainer;
         button.searchWindow.submitButton = filterButton;
@@ -1152,19 +1153,19 @@ function Button(button) {
                 layoutCell3.appendChild(dataTable);
                 if (button.searchWindow) button.searchWindow.tableRows = dataTable.getElementsByClassName("dataRow");
 
-                var sortableTable = jBPM(dataTable);
+                var sortableTable = jQuery(dataTable);
                 var sortableHeaders = sortableTable.find("th");
                 sortableHeaders.wrapInner('<span title="點擊欄名可排序"/>')
                     .each(function () {
-                        var th = jBPM(this),
+                        var th = jQuery(this),
                             thIndex = th.index(),
                             inverse = false;
 
                         th.click(function () {
                             sortableTable.find("td").filter(function () {
-                                return jBPM(this).index() === thIndex;
+                                return jQuery(this).index() === thIndex;
                             }).sortElements(function (a, b) {
-                                return (jBPM.text([a]) > jBPM.text([b])) ?
+                                return (jQuery.text([a]) > jQuery.text([b])) ?
                                     (inverse) ? -1 : 1
                                     : (inverse) ? 1 : -1;
                             }, function () {
@@ -2057,7 +2058,7 @@ function DialogInput(dialogInput) {
     dialogInput.onClick = function (func) {
         if (typeof func === "function") {
             dialogInput.buttonControl.onclick = null;
-            jBPM(dialogInput.buttonControl).click(function () {
+            jQuery(dialogInput.buttonControl).click(function () {
                 try {
                     func();
                 }
