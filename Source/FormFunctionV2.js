@@ -1538,6 +1538,8 @@ function RadioButton(radioButton) {
             return (checkedButtons.length) ? checkedButtons[0].value : "";
         },
         set: function (value) {
+            radioButton.clear();
+
             Array.apply(null, radioButton.buttonControls).forEach(function (button) {
                 if (button.value === value) button.checked = true;
             });
@@ -1552,6 +1554,8 @@ function RadioButton(radioButton) {
             return (checkedButtons.length) ? checkedButtons[0].attributes["text"].value : "";
         },
         set: function (text) {
+            radioButton.clear();
+
             Array.apply(null, radioButton.buttonControls).forEach(function (button) {
                 if (button.attributes["text"].value === text) button.checked = true;
             });
