@@ -2933,17 +2933,19 @@ function setJumpSequence(controlVariables) {
         dropdownListTag.appendChild(dropdownListStyleTag);
         ie11CustomCssTag.appendChild(dropdownListTag);
 
-        var radioButtonTag = document.createElement("radioButton");
+        var radioButtonTag = document.createElement("radiobutton");
         var radioButtonStyleTag = document.createElement("style");
         radioButtonStyleTag.type = "text/css";
-        radioButtonStyleTag.appendChild(document.createTextNode("input[type=radio]:disabled::-ms-check { color: #D1D1D1; background-color: transparent; }"));
+        radioButtonStyleTag.appendChild(document.createTextNode("input[type=radio]:disabled::-ms-check { color: #D6D3D6; background-color: transparent; }"));
         radioButtonTag.appendChild(radioButtonStyleTag);
         ie11CustomCssTag.appendChild(radioButtonTag);
 
+        var checkBoxTag = document.createElement("checkbox");
         var checkBoxCustomStyleTag = document.createElement("style");
         checkBoxCustomStyleTag.type = "text/css";
-        checkBoxCustomStyleTag.appendChild(document.createTextNode("input[type=checkbox]:disabled::-ms-check { color: #D1D1D1; background-color: transparent; }"));
-        ie11CustomCssTag.appendChild(checkBoxCustomStyleTag);
+        checkBoxCustomStyleTag.appendChild(document.createTextNode("input[type=checkbox]:disabled::-ms-check { color: #EFEFEF; background-color: #D6D3D6; }"));
+        checkBoxTag.appendChild(checkBoxCustomStyleTag);
+        ie11CustomCssTag.appendChild(checkBoxTag);
 
         document.body.appendChild(ie11CustomCssTag);
     }
