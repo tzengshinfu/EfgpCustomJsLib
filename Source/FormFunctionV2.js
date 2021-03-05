@@ -2929,21 +2929,21 @@ function setJumpSequence(controlVariables) {
         var dropdownListTag = document.createElement("dropdownlist");
         var dropdownListStyleTag = document.createElement("style");
         dropdownListStyleTag.type = "text/css";
-        dropdownListStyleTag.appendChild(document.createTextNode("select:disabled::-ms-value { color: #4D4D4D; background-color: transparent; }"));
+        dropdownListStyleTag.appendChild(document.createTextNode("select:disabled::-ms-value { color: #000000; background-color: #F0F0F0; }"));
         dropdownListTag.appendChild(dropdownListStyleTag);
         ie11CustomCssTag.appendChild(dropdownListTag);
 
         var radioButtonTag = document.createElement("radiobutton");
         var radioButtonStyleTag = document.createElement("style");
         radioButtonStyleTag.type = "text/css";
-        radioButtonStyleTag.appendChild(document.createTextNode("input[type=radio]:disabled::-ms-check { color: #D6D3D6; background-color: transparent; }"));
+        radioButtonStyleTag.appendChild(document.createTextNode("input[type=radio]:disabled::-ms-check { color: #000000; background-color: #F0F0F0; }"));
         radioButtonTag.appendChild(radioButtonStyleTag);
         ie11CustomCssTag.appendChild(radioButtonTag);
 
         var checkBoxTag = document.createElement("checkbox");
         var checkBoxCustomStyleTag = document.createElement("style");
         checkBoxCustomStyleTag.type = "text/css";
-        checkBoxCustomStyleTag.appendChild(document.createTextNode("input[type=checkbox]:disabled::-ms-check { color: #EFEFEF; background-color: #D6D3D6; }"));
+        checkBoxCustomStyleTag.appendChild(document.createTextNode("input[type=checkbox]:disabled::-ms-check { color: #000000; background-color: #F0F0F0; }"));
         checkBoxTag.appendChild(checkBoxCustomStyleTag);
         ie11CustomCssTag.appendChild(checkBoxTag);
 
