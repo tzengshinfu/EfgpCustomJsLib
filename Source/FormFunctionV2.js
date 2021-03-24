@@ -302,7 +302,7 @@ function Grid(hiddenField) {
 
     grid.load = function (data) {
         if (data) {
-            hiddenField.value = JSON.stringify(data).replace(/"/g, "'");
+            hiddenField.value = JSON.stringify(data).replace(/"/g, "'").replace(/\\\'/g, "\"");
         }
 
         if (hiddenField.value) {
