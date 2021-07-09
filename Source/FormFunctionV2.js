@@ -16,7 +16,7 @@ jQuery = (window["jBPM"]) ? window["jBPM"] : window["__jQuery"];
 /**
 * 下拉選單自訂控制項(新增便捷屬性/方法)
 * @param {HTMLElement} dropdownList 與下拉選單代號相同ID的HTML元素
-* @returns {HTMLElement} 回傳結果
+* @returns {DropdownList} 回傳結果
 */
 function DropdownList(dropdownList) {
     if (!dropdownList) throw new Error("DropDownList控制項不存在," + text.contactAdministrator);
@@ -202,7 +202,7 @@ function DropdownList(dropdownList) {
 /**
 * 表格自訂控制項(新增便捷屬性/方法)
 * @param {HTMLElement} hiddenField 與表格代號相同ID的HTML元素
-* @returns {HTMLElement} 回傳結果
+* @returns {Grid} 回傳結果
 */
 function Grid(hiddenField) {
     var grid = window[hiddenField.id + "Obj"];
@@ -615,7 +615,7 @@ function gridRowClick(pGridId) {
 /**
 * 按鈕自訂控制項(新增便捷屬性/方法)
 * @param {HTMLElement} button 與按鈕代號相同ID的HTML元素
-* @returns {HTMLElement} 回傳結果
+* @returns {Button} 回傳結果
 */
 function Button(button) {
     if (!button) throw new Error("Button控制項不存在," + text.contactAdministrator);
@@ -1196,7 +1196,7 @@ function Button(button) {
 /**
 * 文字框自訂控制項(新增便捷屬性/方法)
 * @param {HTMLElement} textBox 與文字框代號相同ID的HTML元素
-* @returns {HTMLElement} 回傳結果
+* @returns {TextBox} 回傳結果
 */
 function TextBox(textBox) {
     if (!textBox) throw new Error("TextBox控制項不存在," + text.contactAdministrator);
@@ -1517,7 +1517,7 @@ function TextBox(textBox) {
 /**
 * 單選按鈕自訂控制項(新增便捷屬性/方法)
 * @param {HTMLElement} radioButton 與單選按鈕代號相同ID的HTML元素
-* @returns {HTMLElement} 回傳結果
+* @returns {RadioButton} 回傳結果
 */
 function RadioButton(radioButton) {
     if (!radioButton) throw new Error("RadioButton控制項不存在," + text.contactAdministrator);
@@ -1672,7 +1672,7 @@ function RadioButton(radioButton) {
 /**
 * 複選按鈕自訂控制項(新增便捷屬性/方法)
 * @param {HTMLElement} checkBox 與複選按鈕代號相同ID的HTML元素
-* @returns {HTMLElement} 回傳結果
+* @returns {CheckBox} 回傳結果
 */
 function CheckBox(checkBox) {
     if (!checkBox) throw new Error("CheckBox控制項不存在," + text.contactAdministrator);
@@ -1816,7 +1816,7 @@ function CheckBox(checkBox) {
 /**
 * 超連結自訂控制項(新增便捷屬性/方法)
 * @param {HTMLElement} link 與超連結代號相同ID的HTML元素
-* @returns {HTMLElement} 回傳結果
+* @returns {Link} 回傳結果
 */
 function Link(link) {
     if (!link) throw new Error("Link控制項不存在," + text.contactAdministrator);
@@ -1900,7 +1900,7 @@ function Link(link) {
 /**
 * 標籤自訂控制項(新增便捷屬性/方法)
 * @param {HTMLElement} label 與標籤代號相同ID的HTML元素
-* @returns {HTMLElement} 回傳結果
+* @returns {Label} 回傳結果
 */
 function Label(label) {
     if (!label) throw new Error("Label控制項不存在," + text.contactAdministrator);
@@ -1940,7 +1940,7 @@ function Label(label) {
 /**
 * 開窗自訂控制項(新增便捷屬性/方法)
 * @param {HTMLElement} dialogInput 與開窗代號相同ID的HTML元素
-* @returns {HTMLElement} 回傳結果
+* @returns {DialogInput} 回傳結果
 */
 function DialogInput(dialogInput) {
     if (!dialogInput) throw new Error("Dialog控制項不存在," + text.contactAdministrator);
@@ -2142,7 +2142,7 @@ function DialogInput(dialogInput) {
 /**
 * 表單序號自訂控制項(新增便捷屬性/方法)
 * @param {HTMLElement} serialNumberTextBox 與表單序號代號相同ID的HTML元素
-* @returns {HTMLElement} 回傳結果
+* @returns {SerialNumberTextBox} 回傳結果
 */
 function SerialNumberTextBox(serialNumberTextBox) {
     if (!serialNumberTextBox) throw new Error("SerialNumber控制項不存在," + text.contactAdministrator);
@@ -2227,7 +2227,7 @@ function SerialNumberTextBox(serialNumberTextBox) {
 /**
 * 隱藏欄位自訂控制項(新增便捷屬性/方法)
 * @param {HTMLElement} hiddenTextBox 與隱藏欄位代號相同ID的HTML元素
-* @returns {HTMLElement} 回傳結果
+* @returns {HiddenTextBox} 回傳結果
 */
 function HiddenTextBox(hiddenTextBox) {
     if (!hiddenTextBox) throw new Error("Hidden控制項不存在," + text.contactAdministrator);
@@ -2255,7 +2255,7 @@ function HiddenTextBox(hiddenTextBox) {
 /**
 * 圖片自訂控制項(新增便捷屬性/方法)
 * @param {HTMLElement} image 與圖片代號相同ID的HTML元素
-* @returns {HTMLElement} 回傳結果
+* @returns {Image} 回傳結果
 */
 function Image(image) {
     if (!image) throw new Error("Image控制項不存在," + text.contactAdministrator);
@@ -2291,7 +2291,7 @@ function Image(image) {
 /**
 * 條碼自訂控制項(新增便捷屬性/方法)
 * @param {HTMLElement} barcode 與條碼代號相同ID的HTML元素
-* @returns {HTMLElement} 回傳結果
+* @returns {Barcode} 回傳結果
 */
 function Barcode(barcode) {
     if (!barcode) throw new Error("Barcode控制項不存在," + text.contactAdministrator);
@@ -2363,7 +2363,7 @@ function Barcode(barcode) {
 /**
 * 附件按鈕自訂控制項(新增便捷屬性/方法)
 * @param {HTMLElement} attachmentButton 與附件按鈕代號相同ID的HTML元素
-* @returns {HTMLElement} 回傳結果
+* @returns {AttachmentButton} 回傳結果
 */
 function AttachmentButton(attachmentButton) {
     if (!attachmentButton) throw new Error("Attachment控制項不存在," + text.contactAdministrator);
@@ -2426,7 +2426,7 @@ function AttachmentButton(attachmentButton) {
 /**
 * 表單自訂控制項(新增便捷屬性/方法)
 * @param {HTMLElement} form 與表單代號加_shell相同ID的HTML元素
-* @returns {HTMLElement} 回傳結果
+* @returns {Form} 回傳結果
 */
 function Form(form) {
     if (!form) throw new Error("Form控制項不存在," + text.contactAdministrator);
