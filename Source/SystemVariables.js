@@ -1,0 +1,17 @@
+/** 使用者代號 */ var userId;
+/** 使用者姓名 */ var userName;
+/** 主部門職稱 */ var mainFunctionName;
+/** 主部門組織代號 */ var mainOrgId;
+/** 主部門組織名稱 */ var mainOrgName;
+/** 主部門代號 */ var mainOrgUnitIds;
+/** 主部門名稱 */ var mainOrgUnitNames;
+/** 活動代號 */ var activityId;
+/** 活動名稱 */ var activityName;
+/** 預設代理人代號 */ var defaultSubstituteId;
+/** 預設代理人姓名 */ var defaultSubstituteName;
+/** 表單代號 */ var formId;
+/** 表單名稱 */ var formName;
+/** 流程代號 */ var processId;
+/** 流程名稱 */ var processName;
+/** 流程序號 */ var serialNumber;
+/** 系統日期 */ var systemDateTime;
