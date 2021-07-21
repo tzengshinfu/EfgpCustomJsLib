@@ -256,6 +256,7 @@ interface HiddenTextBox extends HTMLElement {
     controlType: string;
     titleControl: Label | undefined;
     needCheck: boolean;
+    value: string;
     title: string;
     noDataMessage: string;
     clear(): void;
