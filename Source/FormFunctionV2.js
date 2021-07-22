@@ -452,6 +452,13 @@ function Grid(hiddenField) {
 
         grid.getRowTemplate(rowIndex).setStyle("background-color", color);
     }
+    Object.defineProperty(grid, "backgroundColor", {
+        get: function () { return document.getElementById(grid._id + '-headers').getElementsByClassName('aw-item-box')[0].style.backgroundColor; },
+        set: function (color) {
+            Array.from(document.getElementById(grid._id + '-headers').getElementsByClassName('aw-item-box')).forEach(function (column) { if (column.id.indexOf('end') === -1) column.style.backgroundColor = color; });
+            grid.getHeader().getContent("box").setStyle('background', color);
+        }
+    });
     grid.add = function () {
         grid.addRow();
         grid.reposition();
