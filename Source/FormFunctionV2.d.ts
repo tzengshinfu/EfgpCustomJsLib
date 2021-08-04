@@ -26,7 +26,6 @@ interface DropdownList extends HTMLElement {
 }
 
 interface Grid extends HTMLElement {
-    getData(): string[][];
     controlType: string;
     titleControl: Label | undefined;
     columnWidth: number;
@@ -51,6 +50,7 @@ interface Grid extends HTMLElement {
     titleGapTop: number;
     titleGapLeft: number;
     previousValue: string;
+    getData(): string[][];
     load(data: string[]): void;
     save(): void;
     onChange(func: Function): void;
