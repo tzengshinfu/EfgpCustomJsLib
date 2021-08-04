@@ -26,7 +26,7 @@ interface DropdownList extends HTMLElement {
 }
 
 interface Grid extends HTMLElement {
-    getData(): (string | number | boolean)[][];
+    getData(): string[][];
     controlType: string;
     titleControl: Label | undefined;
     columnWidth: number;
