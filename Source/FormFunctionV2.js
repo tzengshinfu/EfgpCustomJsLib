@@ -571,6 +571,39 @@ function Grid(hiddenField) {
         if (grid.beforeReloadTop) grid.top = grid.beforeReloadTop;
         if (grid.beforeReloadLeft) grid.left = grid.beforeReloadLeft;
     }
+    grid.enableCellEdit = function (columnIds) {
+        var columnIndices = columnIds.map(function (columnId) { return grid.columnIds.indexOf(columnId); });
+        var timerID = window.setInterval(function () {
+            if (document.getElementById(grid._id).getElementsByClassName('aw-cells-normal').length > 0) {
+                clearInterval(timerID);
+
+                Array.from(document.getElementById(grid._id).getElementsByClassName('aw-cells-normal')).forEach(function (cell) {
+                    var cellRow = parseInt(cell.id.split('-')[3], 10);
+                    var cellColumn = parseInt(cell.id.split('-')[2], 10);
+
+                    if (columnIndices.indexOf(cellColumn) === -1) {
+                        return;
+                    }
+
+                    var cellValue = grid.getData()[cellRow][cellColumn];
+
+                    cell.onclick = function () {
+                        var newCellValue = prompt('內容修改', cellValue);
+
+                        if (newCellValue === null) {
+                            return;
+                        }
+
+                        var currentGridValues = JSON.parse(grid.value.replace(/'/g, '"'));
+                        currentGridValues[cellRow][cellColumn] = newCellValue;
+
+                        grid.load(currentGridValues);
+                        grid.enableCellEdit();
+                    }
+                });
+            }
+        }, 500);
+    }
     grid.previousValue = grid.value; //用於onchange事件+對話框confirm(),當使用者取消時可由此屬性取回之前的值
 
     grid.load();

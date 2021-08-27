@@ -73,6 +73,7 @@ interface Grid extends HTMLElement {
     display(data: string[]): void;
     getDuplicateRowIndex(excludeSelectedRow: number, columnIds: string[]): number;
     reposition(): void;
+    enableCellEdit(columnIds: string[]): void;
 }
 
 interface Button extends HTMLElement {
