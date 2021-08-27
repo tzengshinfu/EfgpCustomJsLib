@@ -572,7 +572,7 @@ function Grid(hiddenField) {
         if (grid.beforeReloadLeft) grid.left = grid.beforeReloadLeft;
     }
     grid.enableCellEdit = function (columnIds) {
-        var columnIndices = columnIds.map(function (columnId) { return grid.columnIds.indexOf(columnId); });
+        var columnIndices = columnIds ? columnIds.map(function (columnId) { return grid.columnIds.indexOf(columnId); }) : [];
         var timerID = window.setInterval(function () {
             if (document.getElementById(grid._id).getElementsByClassName('aw-cells-normal').length > 0) {
                 clearInterval(timerID);
@@ -581,7 +581,7 @@ function Grid(hiddenField) {
                     var cellRow = parseInt(cell.id.split('-')[3], 10);
                     var cellColumn = parseInt(cell.id.split('-')[2], 10);
 
-                    if (columnIndices.indexOf(cellColumn) === -1) {
+                    if (columnIndices.length > 0 && columnIndices.indexOf(cellColumn) === -1) {
                         return;
                     }
 
@@ -598,7 +598,7 @@ function Grid(hiddenField) {
                         currentGridValues[cellRow][cellColumn] = newCellValue;
 
                         grid.load(currentGridValues);
-                        grid.enableCellEdit();
+                        grid.enableCellEdit(columnIds);
                     }
                 });
             }
