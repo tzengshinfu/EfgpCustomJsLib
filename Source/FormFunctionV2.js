@@ -571,21 +571,23 @@ function Grid(hiddenField) {
         if (grid.beforeReloadTop) grid.top = grid.beforeReloadTop;
         if (grid.beforeReloadLeft) grid.left = grid.beforeReloadLeft;
     }
-    grid.enableCellEdit = function (columnIds) {
+    grid.enableCellEdit = function (columnIds, checkFunctions) {
         var columnIndices = columnIds ? columnIds.map(function (columnId) { return grid.columnIds.indexOf(columnId); }) : [];
         var timerID = window.setInterval(function () {
             if (document.getElementById(grid._id).getElementsByClassName('aw-cells-normal').length > 0) {
                 clearInterval(timerID);
 
                 Array.from(document.getElementById(grid._id).getElementsByClassName('aw-cells-normal')).forEach(function (cell) {
-                    var cellRow = parseInt(cell.id.split('-')[3], 10);
-                    var cellColumn = parseInt(cell.id.split('-')[2], 10);
+                    cell.onclick = null;
 
-                    if (columnIndices.length > 0 && columnIndices.indexOf(cellColumn) === -1) {
+                    var cellRowIndex = parseInt(cell.id.split('-')[3], 10);
+                    var cellColIndex = parseInt(cell.id.split('-')[2], 10);
+
+                    if (columnIndices.length > 0 && columnIndices.indexOf(cellColIndex) === -1) {
                         return;
                     }
 
-                    var cellValue = grid.getData()[cellRow][cellColumn];
+                    var cellValue = grid.getData()[cellRowIndex][cellColIndex];
 
                     cell.onclick = function () {
                         var newCellValue = prompt('內容修改', cellValue);
@@ -594,11 +596,22 @@ function Grid(hiddenField) {
                             return;
                         }
 
-                        var currentGridValues = JSON.parse(grid.value.replace(/'/g, '"'));
-                        currentGridValues[cellRow][cellColumn] = newCellValue;
+                        checkFunctions = checkFunctions === undefined ? checkFunctions = [] : checkFunctions;
 
-                        grid.load(currentGridValues);
-                        grid.enableCellEdit(columnIds);
+                        if (checkFunctions[cellColIndex] !== undefined && typeof checkFunctions[cellColIndex] === 'function') {
+                            try {
+                                checkFunctions[cellColIndex](newCellValue);
+
+                                var currentGridValues = JSON.parse(grid.value.replace(/'/g, '"'));
+                                currentGridValues[cellRowIndex][cellColIndex] = newCellValue;
+
+                                grid.load(currentGridValues);
+                                grid.enableCellEdit(columnIds, checkFunctions);
+                            }
+                            catch (ex) {
+                                showException(ex);
+                            }
+                        }
                     }
                 });
             }
