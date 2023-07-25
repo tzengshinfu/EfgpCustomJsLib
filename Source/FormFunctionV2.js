@@ -19,6 +19,12 @@ jQuery = (window["jBPM"]) ? window["jBPM"] : window["__jQuery"];
 * @returns {DropdownList} 回傳結果
 */
 function DropdownList(dropdownList) {
+    if (formMode === "isPrintForm") {
+        var dropdownList = document.getElementById(dropdownList.id + "_txt");
+        dropdownList.style.border = "1px solid rgb(204, 204, 204)";
+        return;
+    }
+
     if (!dropdownList) throw new Error("DropDownList控制項不存在," + text.contactAdministrator);
     if (dropdownList.controlType) return dropdownList; //避免重覆宣告
 
@@ -205,6 +211,12 @@ function DropdownList(dropdownList) {
 * @returns {Grid} 回傳結果
 */
 function Grid(hiddenField) {
+    if (formMode === "isPrintForm") {
+        var grid = document.getElementById(hiddenField.id + "~~TABLE");
+        grid.getElementsByTagName('thead')[0].getElementsByTagName('tr')[0].style.backgroundColor = '#F0F0F0';
+        return;
+    }
+
     var grid = window[hiddenField.id + "Obj"];
 
     if (!grid) throw new Error("Grid控制項不存在," + text.contactAdministrator);
@@ -671,6 +683,7 @@ function gridRowClick(pGridId) {
 * @returns {Button} 回傳結果
 */
 function Button(button) {
+    if (formMode === "isPrintForm") return;
     if (!button) throw new Error("Button控制項不存在," + text.contactAdministrator);
     if (button.controlType) return button; //避免重覆宣告
 
@@ -1418,6 +1431,7 @@ function TextBox(textBox) {
     textBox.previousValue = textBox.value; //用於onchange事件+對話框confirm(),當使用者取消時可由此屬性取回之前的值
 
     textBox.style.border = "#ccc 1px solid";
+	if (formMode === 'isPrintForm') textBox.style.display = "block";
 
     if (textBox.txtDatatype) {
         if (textBox.txtDatatype.in(["1", "2"])) {
@@ -1996,6 +2010,12 @@ function Label(label) {
 * @returns {DialogInput} 回傳結果
 */
 function DialogInput(dialogInput) {
+    if (formMode === "isPrintForm") {
+        var dialogInput = document.getElementById(dialogInput.id);
+        dialogInput.style.border = "1px solid rgb(204, 204, 204)";
+        return;
+    }
+
     if (!dialogInput) throw new Error("Dialog控制項不存在," + text.contactAdministrator);
     if (dialogInput.controlType) return dialogInput; //避免重覆宣告
 
@@ -2419,6 +2439,7 @@ function Barcode(barcode) {
 * @returns {AttachmentButton} 回傳結果
 */
 function AttachmentButton(attachmentButton) {
+    if (formMode === "isPrintForm") return;
     if (!attachmentButton) throw new Error("Attachment控制項不存在," + text.contactAdministrator);
     if (attachmentButton.controlType) return attachmentButton; //避免重覆宣告
 
@@ -2496,6 +2517,35 @@ function Form(form) {
     });
 
     return form;
+}
+
+/**
+* 密碼框自訂控制項(新增便捷屬性/方法)
+* @param {HTMLElement} password 與密碼框代號相同ID的HTML元素
+* @returns {Password} 回傳結果
+*/
+function Password(password) {
+    if (formMode === "isPrintForm") return;
+    if (!password) throw new Error("Password控制項不存在," + text.contactAdministrator);
+    if (password.controlType) return password; //避免重覆宣告
+
+    password.controlType = "Password";
+    password.titleControl = document.getElementById("lbl_" + password.id) ? Label(document.getElementById("lbl_" + password.id)) : undefined;
+    password.needCheck = true; //此控制項是否需要檢查是否有值
+    Object.defineProperty(password, "title", {
+        get: function () { return (password.titleControl) ? password.titleControl.innerText : password.id; },
+        set: function (text) { if (password.titleControl) password.titleControl.innerText = text; }
+    });
+    Object.defineProperty(password, "noDataMessage", {
+        get: function () { return (!password.value) ? "[" + password.title + "]" + "無值" : ""; }
+    });
+    password.clear = function () {
+        password.value = "";
+    }
+
+    if (password.titleControl) password.titleControl.style.display = "none";
+
+    return password;
 }
 
 /**
@@ -2605,26 +2655,12 @@ function checkConditionError(condition, errorMessage) {
 * @param {function} task 欲執行的function內容
 */
 function runLongTimeTask(task) {
-    var temp = document.createElement("DIV");
-    temp.innerHTML = "<div id=\"loadingOverlay\" style=\"position: fixed;width: 100%;height: 100%;top: 0;left: 0;right: 0;bottom: 0;background-color: rgba(0,0,0,0.1);z-index: 2;display: table;\"><div style=\"text-align: center;display: table-cell;vertical-align: middle;\"></div></div>";
-    var loadingOverlay = temp.firstChild;
-    var loadingImage = document.createElement("IMG");
-    loadingImage.style.width = "80px";
-    loadingImage.style.height = "150px";
-    loadingImage.src = "/NaNaWeb/theme/default/images/index_images/ajax-loader.gif";
-    loadingOverlay.firstChild.appendChild(loadingImage);
-    window.parent.parent.parent.document.body.appendChild(loadingOverlay);
-
     setTimeout(function () {
         try {
             task();
         }
         catch (ex) {
             showException(ex);
-        }
-        finally {
-            var loadingOverlay = window.parent.parent.parent.document.getElementById("loadingOverlay");
-            loadingOverlay.parentNode.removeChild(loadingOverlay);
         }
     }, 0);
 }
